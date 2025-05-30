@@ -3,7 +3,7 @@ import {
   DependencyContext,
   PlaybackState,
   clamp,
-  isReactive,
+  isReactive, 
   useLogger,
   useThread,
 } from '@revideo/core';
@@ -112,7 +112,10 @@ export abstract class Media extends Rect {
   }
 
   public getDuration(): number {
-    return this.mediaElement().duration;
+    const mElement = this.mediaElement();
+    const isVideo = (mElement instanceof HTMLVideoElement);
+    const isAudio = (mElement instanceof HTMLVideoElement);
+    return (this.isIOS() && (isVideo || isAudio)) ? 2 /** dummy duration for iOS */ :  this.mediaElement().duration;    
   }
 
   public getVolume(): number {
@@ -270,7 +273,7 @@ export abstract class Media extends Rect {
 
     const onError = () => {
       const reason = this.getErrorReason(media.error?.code);
-      console.log(`ERROR: Error loading video: ${this.src()}, ${reason}`);
+      console.error(`ERROR: Error loading video: ${this.src()}, ${reason}`);
       media.removeEventListener('error', onError);
     };
 
@@ -292,19 +295,40 @@ export abstract class Media extends Rect {
     );
   }
 
-  public play() {
-    const time = useThread().time;
-    const start = time();
-    const offset = this.time();
-    const playbackRate = this.playbackRate();
-    this.playing(true);
-    this.time(() => this.clampTime(offset + (time() - start) * playbackRate));
-  }
-
   public pause() {
+    const media = this.mediaElement();
+    
     this.playing(false);
     this.time.save();
-    this.mediaElement().pause();
+    media.pause();
+  }
+
+  public play() {
+    const media = this.mediaElement();
+    
+    // Set playback rate on media element
+    media.playbackRate = this.playbackRate();
+    
+    // Start playing the media element
+    const playPromise = media.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(error => {
+        console.warn('Error playing media:', error);
+        this.playing(false);
+      });
+    }
+    
+    this.playing(true);
+    
+    // Update time based on thread time
+    const time = useThread().time;
+    const start = time();
+    const offset = media.currentTime;
+    
+    this.time(() => {
+      const newTime = this.clampTime(offset + (time() - start) * this.playbackRate());
+      return newTime;
+    });
   }
 
   public clampTime(time: number): number {
@@ -342,5 +366,14 @@ export abstract class Media extends Rect {
     }
 
     return reason;
+  }
+
+  // Helper method to check if running on iOS
+  protected isIOS(): boolean {
+    if (typeof navigator === 'undefined') return false;
+    const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    return isIos;
   }
 }
