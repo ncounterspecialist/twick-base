@@ -11,15 +11,15 @@ import prompts from 'prompts';
 const templates = [
   {
     value: 'default',
-    title: 'Minimal, standalone Revideo project',
-    description: 'A minimal example to get started with Revideo.',
+    title: 'Minimal, standalone Twick project',
+    description: 'A minimal example to get started with Twick.',
     recommended: true,
     startcommands: 'default',
   },
   {
     value: 'saas-template',
-    title: 'Revideo with Next.js',
-    description: 'A minimal web app built with Revideo and Next.js.',
+    title: 'Twick with Next.js',
+    description: 'A minimal web app built with Twick and Next.js.',
     recommended: true,
     startcommands: 'readme',
   },
@@ -69,7 +69,7 @@ const templates = [
   {
     value: 'three-js-example',
     title: 'Three.js Example',
-    description: 'Integrate Three.js with Revideo for 3D animations.',
+    description: 'Integrate Three.js with Twick for 3D animations.',
     startcommands: 'default',
   },
   {

@@ -1,7 +1,7 @@
 {
   "name": "@twick/create",
   "version": "0.13.0",
-  "description": "Quickly scaffold revideo projects",
+  "description": "Quickly scaffold twick projects",
   "main": "index.js",
   "author": "twick",
   "homepage": "https://re.video/",
@@ -9,7 +9,7 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "create-revideo": "index.js"
+    "create-twick": "index.js"
   },
   "files": [
     "index.js",
@@ -17,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/havenhq/revideo.git"
+    "url": "https://github.com/ncounterspecialist/twick-base.git"
   },
   "devDependencies": {
     "@twick/2d": "^0.13.0",

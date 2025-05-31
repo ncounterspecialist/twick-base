@@ -1,8 +1,8 @@
 import {Video, Audio, makeScene2D} from '@twick/2d';
 import {createRef, waitFor, all} from '@twick/core';
 
-import exampleMp4 from '@revideo/examples/assets/example.mp4';
-import exampleMp3 from '@revideo/examples/assets/123.mp3';
+import exampleMp4 from '@twick/examples/assets/example.mp4';
+import exampleMp3 from '@twick/examples/assets/123.mp3';
 
 export default makeScene2D('media-video', function* (view) {
   const videoRef = createRef<Video>();
@@ -12,7 +12,7 @@ export default makeScene2D('media-video', function* (view) {
   yield view.add(
     <Video
       ref={videoRef}
-      src="https://static-assets.kifferai.com/developmen/a251d9971a55/brand-assets/video_1746786031627-96448ec8-6430-4d4b-bb89-ebdbfeade7fa.mp4"
+      src={exampleMp4}
       width={720}
       height={1080}
     />
@@ -21,7 +21,7 @@ export default makeScene2D('media-video', function* (view) {
   yield view.add(
     <Audio
       ref={audioRef}
-      src="https://static-assets.kifferai.com/developmen/a251d9971a55/brand-music/Unstoppable-Reprise-909549aa-6807-482b-ab92-bce7e6834fe7.mp3"
+      src={exampleMp3}
     />
   );
 

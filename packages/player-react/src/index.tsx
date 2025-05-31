@@ -6,7 +6,7 @@ import {Controls} from './controls';
 import './index.css';
 import {shouldShowControls} from './utils';
 
-interface RevideoPlayerProps {
+interface TwickPlayerProps {
   playing?: string;
   variables?: string;
   looping?: string;
@@ -21,7 +21,7 @@ declare global {
   namespace JSX {
     interface IntrinsicElements {
       // eslint-disable-next-line
-      'twick-player': RevideoPlayerProps & ComponentProps<'div'>;
+      'twick-player': TwickPlayerProps & ComponentProps<'div'>;
     }
   }
 }

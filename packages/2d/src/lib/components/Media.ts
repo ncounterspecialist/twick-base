@@ -522,10 +522,10 @@ export abstract class Media extends Rect {
     this.setVolume(this.volume);
   }
 
-  protected autoPlayBasedOnRevideo() {
-    // Auto-start/stop playback based on Revideo's playback state
+  protected autoPlayBasedOnTwick() {
+    // Auto-start/stop playback based on Twick's playback state
     const playbackState = this.view().playbackState();
-    // console.log('autoPlayBasedOnRevideo called:', {
+    // console.log('autoPlayBasedOnTwick called:', {
     //   playbackState,
     //   currentlyPlaying: this.playing(),
     //   shouldAutoPlay: (playbackState === PlaybackState.Playing || playbackState === PlaybackState.Presenting) && !this.playing(),

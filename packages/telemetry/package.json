@@ -1,10 +1,10 @@
 {
   "name": "@twick/telemetry",
   "version": "0.13.0",
-  "description": "Telemetry for Revideo. Check the documentation to learn how to disable it.",
+  "description": "Telemetry for Twick. Check the documentation to learn how to disable it.",
   "main": "dist/index.js",
-  "author": "revideo",
-  "homepage": "https://re.video/",
+  "author": "twick",
+  "homepage": "https://twick.base/",
   "bugs": "https://github.com/ncounterspecialist/twick-base/issues",
   "license": "MIT",
   "scripts": {
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/havenhq/revideo.git"
+    "url": "https://github.com/ncounterspecialist/twick-base.git"
   },
   "files": [
     "dist",

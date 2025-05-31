@@ -1,10 +1,10 @@
 {
   "name": "@twick/renderer",
   "version": "0.13.0",
-  "description": "A headless renderer for revideo",
+  "description": "A headless renderer for twick",
   "main": "lib/server/index.js",
-  "author": "revideo",
-  "homepage": "https://re.video/",
+  "author": "twick",
+  "homepage": "https://twick.base/",
   "bugs": "https://github.com/ncounterspecialist/twick-base/issues",
   "license": "MIT",
   "scripts": {

@@ -10,7 +10,7 @@
     "build": "tsc && postcss src/**/*.css --dir dist"
   },
   "keywords": [],
-  "author": "revideo",
+  "author": "twick",
   "license": "MIT",
   "devDependencies": {
     "@types/react": "^18",

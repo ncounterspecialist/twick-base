@@ -336,8 +336,8 @@ export class Video extends Media {
   }
 
   protected override async draw(context: CanvasRenderingContext2D) {
-    // Auto-start playback if Revideo is playing but media isn't
-    this.autoPlayBasedOnRevideo();
+    // Auto-start playback if Twick is playing but media isn't
+    this.autoPlayBasedOnTwick();
     
     this.drawShape(context);
     const alpha = this.alpha();

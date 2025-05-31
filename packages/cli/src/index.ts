@@ -30,7 +30,7 @@ program
 
     const {projectFile, port} = options;
     process.env.PROJECT_FILE = projectFile;
-    process.env.REVIDEO_PORT = port;
+    process.env.TWICK_PORT = port;
 
     createServer().listen(port, () => {
       console.log(`Server listening on port ${port}`);

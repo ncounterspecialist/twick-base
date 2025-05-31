@@ -1,7 +1,7 @@
 import type {Plugin as VitePlugin} from 'vite';
 
 /**
- * Represents a Revideo project configured in the Vite plugin.
+ * Represents a Twick project configured in the Vite plugin.
  */
 export interface ProjectData {
   /**
@@ -19,7 +19,7 @@ export interface ProjectData {
 }
 
 /**
- * The Revideo configuration passed to each plugin.
+ * The Twick configuration passed to each plugin.
  */
 export interface PluginConfig {
   /**
@@ -52,7 +52,7 @@ export interface PluginOptions {
    * The configuration hook of the plugin.
    *
    * @remarks
-   * Invoked during `configResolved` hook of Vite, contains the Revideo
+   * Invoked during `configResolved` hook of Vite, contains the Twick
    * specific configuration.
    *
    * @param config - The configuration passed to the plugin.
@@ -91,15 +91,15 @@ export interface PluginOptions {
 }
 
 /**
- * Represents a Revideo plugin.
+ * Represents a Twick plugin.
  *
  * @remarks
  * It's a normal Vite plugin that can provide additional configuration specific
- * to Revideo.
+ * to Twick.
  */
 export type Plugin = VitePlugin & {
   /**
-   * The configuration specific to Revideo.
+   * The configuration specific to Twick.
    */
   [PLUGIN_OPTIONS]: PluginOptions;
 };

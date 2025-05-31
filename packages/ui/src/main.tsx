@@ -84,7 +84,7 @@ export function editor(project: Project) {
     setItem(frameKey, frame);
   });
 
-  document.title = `${project.name} | Revideo`;
+  document.title = `${project.name} | Twick`;
 
   const plugins = [GridPlugin(), ...project.plugins];
 

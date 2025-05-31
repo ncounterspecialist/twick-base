@@ -1,7 +1,7 @@
 {
   "name": "@twick/ffmpeg",
   "version": "0.13.0",
-  "description": "Ffmpeg utilities for revideo",
+  "description": "Ffmpeg utilities for twick",
   "main": "dist/index.js",
   "author": "twick",
   "homepage": "https://re.video/",

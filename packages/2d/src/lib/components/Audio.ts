@@ -150,8 +150,8 @@ export class Audio extends Media {
   }
 
   protected override async draw(context: CanvasRenderingContext2D) {
-    // Auto-start playback if Revideo is playing but media isn't
-    this.autoPlayBasedOnRevideo();
+    // Auto-start playback if Twick is playing but media isn't
+    this.autoPlayBasedOnTwick();
     
     const playbackState = this.view().playbackState();
 

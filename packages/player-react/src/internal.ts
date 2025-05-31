@@ -35,7 +35,7 @@ enum State {
   Error = 'error',
 }
 
-class RevideoPlayer extends HTMLElement {
+class TwickPlayer extends HTMLElement {
   public static get observedAttributes() {
     return [
       'playing',
@@ -295,5 +295,5 @@ class RevideoPlayer extends HTMLElement {
 }
 
 if (!customElements.get(ID)) {
-  customElements.define(ID, RevideoPlayer);
+  customElements.define(ID, TwickPlayer);
 }
