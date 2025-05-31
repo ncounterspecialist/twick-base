@@ -1,9 +1,9 @@
 {
-  "name": "@revideo/template",
+  "name": "@twick/template",
   "private": true,
   "version": "0.0.0",
-  "description": "Basic project template for revideo",
-  "author": "revideo",
+  "description": "Basic project template for twick",
+  "author": "twick",
   "license": "MIT",
   "main": "src/project.ts",
   "scripts": {
@@ -12,13 +12,13 @@
     "render": "tsc && node dist/render.js"
   },
   "dependencies": {
-    "@revideo/2d": "*",
-    "@revideo/core": "*",
-    "@revideo/ffmpeg": "*",
-    "@revideo/renderer": "*"
+    "@twick/2d": "*",
+    "@twick/core": "*",
+    "@twick/ffmpeg": "*",
+    "@twick/renderer": "*"
   },
   "devDependencies": {
-    "@revideo/ui": "*",
-    "@revideo/vite-plugin": "*"
+    "@twick/ui": "*",
+    "@twick/vite-plugin": "*"
   }
 }

@@ -1,4 +1,4 @@
-import {Vector2} from '@revideo/core';
+import {Vector2} from '@twick/core';
 import {describe, expect, test} from 'vitest';
 import {getPolylineProfile} from './getPolylineProfile';
 

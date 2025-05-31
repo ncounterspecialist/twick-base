@@ -1,4 +1,4 @@
-import {BBox, Vector2} from '@revideo/core';
+import {BBox, Vector2} from '@twick/core';
 
 import {Polynomial} from './Polynomial';
 

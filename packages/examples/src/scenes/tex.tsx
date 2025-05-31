@@ -1,5 +1,5 @@
-import {Latex, makeScene2D} from '@revideo/2d';
-import {createRef, waitFor} from '@revideo/core';
+import {Latex, makeScene2D} from '@twick/2d';
+import {createRef, waitFor} from '@twick/core';
 
 export default makeScene2D('tex', function* (view) {
   const tex = createRef<Latex>();

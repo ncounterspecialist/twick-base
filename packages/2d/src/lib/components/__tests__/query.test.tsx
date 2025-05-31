@@ -1,4 +1,4 @@
-import {createRef, createRefArray} from '@revideo/core';
+import {createRef, createRefArray} from '@twick/core';
 import {describe, expect, it} from 'vitest';
 import {useScene2D} from '../../scenes';
 import {is} from '../../utils';

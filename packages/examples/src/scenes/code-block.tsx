@@ -1,12 +1,12 @@
-import {makeScene2D} from '@revideo/2d';
+import {makeScene2D} from '@twick/2d';
 import {
   CodeBlock,
   edit,
   insert,
   lines,
   remove,
-} from '@revideo/2d/lib/components/CodeBlock';
-import {all, createRef, waitFor} from '@revideo/core';
+} from '@twick/2d/lib/components/CodeBlock';
+import {all, createRef, waitFor} from '@twick/core';
 
 export default makeScene2D('code-block', function* (view) {
   const codeRef = createRef<CodeBlock>();

@@ -1,5 +1,5 @@
-import type {BBox, Spacing} from '@revideo/core';
-import {Vector2} from '@revideo/core';
+import type {BBox, Spacing} from '@twick/core';
+import {Vector2} from '@twick/core';
 import {adjustRectRadius} from '../utils';
 import {CircleSegment} from './CircleSegment';
 import {CubicBezierSegment} from './CubicBezierSegment';

@@ -4,9 +4,9 @@ import 'vite/types/customEvent';
 
 declare module 'vite/types/customEvent' {
   interface CustomEventMap {
-    'revideo:meta': {source: string; data: any};
-    'revideo:meta-ack': {source: string};
-    'revideo:export': {
+    'twick:meta': {source: string; data: any};
+    'twick:meta-ack': {source: string};
+    'twick:export': {
       data: string;
       subDirectories: string[];
       mimeType: string;
@@ -14,7 +14,7 @@ declare module 'vite/types/customEvent' {
       sceneFrame?: number;
       groupByScene?: boolean;
     };
-    'revideo:export-ack': {frame: number};
-    'revideo:assets': {urls: string[]};
+    'twick:export-ack': {frame: number};
+    'twick:assets': {urls: string[]};
   }
 }

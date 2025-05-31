@@ -3,8 +3,8 @@ import type {
   PossibleColor,
   SignalValue,
   SimpleSignal,
-} from '@revideo/core';
-import {useLogger} from '@revideo/core';
+} from '@twick/core';
+import {useLogger} from '@twick/core';
 import {colorSignal, computed, initial, signal} from '../decorators';
 import type {ImgProps} from './Img';
 import {Img} from './Img';

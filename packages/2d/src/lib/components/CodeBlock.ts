@@ -5,7 +5,7 @@ import type {
   SimpleSignal,
   ThreadGenerator,
   TimingFunction,
-} from '@revideo/core';
+} from '@twick/core';
 import {
   Vector2,
   clampRemap,
@@ -18,7 +18,7 @@ import {
   tween,
   useLogger,
   waitFor,
-} from '@revideo/core';
+} from '@twick/core';
 import type {Code, CodeStyle, CodeTree, MorphToken, Token} from 'code-fns';
 import {diff, parse, ready} from 'code-fns';
 import {computed, initial, nodeName, parser, signal} from '../decorators';

@@ -1,11 +1,11 @@
 {
-  "name": "@revideo/ffmpeg",
-  "version": "0.10.4",
+  "name": "@twick/ffmpeg",
+  "version": "0.13.0",
   "description": "Ffmpeg utilities for revideo",
   "main": "dist/index.js",
-  "author": "revideo",
+  "author": "twick",
   "homepage": "https://re.video/",
-  "bugs": "https://github.com/havenhq/revideo/issues",
+  "bugs": "https://github.com/ncounterspecialist/twick-base/issues",
   "license": "MIT",
   "scripts": {
     "build": "tsc"
@@ -17,8 +17,8 @@
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@ffprobe-installer/ffprobe": "^2.0.0",
-    "@revideo/core": "0.10.4",
-    "@revideo/telemetry": "0.10.4",
+    "@twick/core": "^0.13.0",
+    "@twick/telemetry": "^0.13.0",
     "fluent-ffmpeg": "^2.1.2",
     "uuid": "^10.0.0"
   },

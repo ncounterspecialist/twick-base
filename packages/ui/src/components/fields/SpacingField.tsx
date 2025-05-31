@@ -1,4 +1,4 @@
-import type {Spacing} from '@revideo/core';
+import type {Spacing} from '@twick/core';
 import {Field, FieldSet, FieldValue, NumericField} from './Layout';
 
 export interface SpacingFieldProps {

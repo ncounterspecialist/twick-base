@@ -1,10 +1,10 @@
-import type {Project, RenderVideoUserProjectSettings} from '@revideo/core';
+import type {Project, RenderVideoUserProjectSettings} from '@twick/core';
 import {
   Color,
   Renderer,
   Vector2,
   getFullRenderingSettings,
-} from '@revideo/core';
+} from '@twick/core';
 
 declare global {
   interface Window {

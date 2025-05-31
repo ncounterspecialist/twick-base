@@ -3,8 +3,8 @@ import type {
   Signal,
   SignalValue,
   Vector2Signal,
-} from '@revideo/core';
-import {transformVectorAsPoint, Vector2} from '@revideo/core';
+} from '@twick/core';
+import {transformVectorAsPoint, Vector2} from '@twick/core';
 import type {KnotInfo} from '../curves';
 import {
   cloneable,

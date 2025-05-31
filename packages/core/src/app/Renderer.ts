@@ -206,7 +206,7 @@ export class Renderer {
       );
 
       if (import.meta.hot) {
-        import.meta.hot.send('revideo:export', {
+        import.meta.hot.send('twick:export', {
           frame,
           data: this.stage.finalBuffer.toDataURL('image/png'),
           mimeType: 'image/png',

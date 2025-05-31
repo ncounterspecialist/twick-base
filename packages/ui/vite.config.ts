@@ -7,9 +7,9 @@ export default defineConfig({
   resolve: {
     alias: {
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      '@revideo/ui': '/src/main.tsx',
+      '@twick/ui': '/src/main.tsx',
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      '@revideo/2d/editor': '@revideo/2d/src/editor',
+      '@twick/2d/editor': '@twick/2d/src/editor',
     },
   },
   build: {
@@ -19,7 +19,7 @@ export default defineConfig({
       fileName: 'main',
     },
     rollupOptions: {
-      external: [/^@revideo\/core/, /^@?preact/],
+      external: [/^@twick\/core/, /^@?preact/],
     },
   },
   plugins: [

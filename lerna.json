@@ -2,8 +2,11 @@
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "useNx": true,
   "private": false,
-  "version": "0.10.4",
-  "ignoreChanges": ["**/*.test.ts", "**/*.md"],
+  "version": "0.13.0",
+  "ignoreChanges": [
+    "**/*.test.ts",
+    "**/*.md"
+  ],
   "message": "ci(release): %v [skip ci]",
   "conventionalCommits": true,
   "command": {

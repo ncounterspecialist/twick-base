@@ -4,7 +4,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
     "paths": {
-      "@revideo/2d": ["../lib"]
+      "@twick/2d": ["../lib"]
     }
   },
   "references": [{"path": "../lib/tsconfig.json"}],

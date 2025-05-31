@@ -1,4 +1,4 @@
-const UNINITIALIZED = Symbol.for('@revideo/core/decorators/UNINITIALIZED');
+const UNINITIALIZED = Symbol.for('@twick/core/decorators/UNINITIALIZED');
 
 /**
  * Create a lazy decorator.

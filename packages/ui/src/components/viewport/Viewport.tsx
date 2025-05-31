@@ -1,4 +1,4 @@
-import {getFullRenderingSettings, RendererState} from '@revideo/core';
+import {getFullRenderingSettings, RendererState} from '@twick/core';
 import clsx from 'clsx';
 import {useEffect, useState} from 'preact/hooks';
 import {useApplication} from '../../contexts';

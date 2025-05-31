@@ -1,1 +1,1 @@
-/// <reference types="@revideo/core/project" />
+/// <reference types="@twick/core/project" />

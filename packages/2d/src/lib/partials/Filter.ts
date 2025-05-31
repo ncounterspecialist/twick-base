@@ -1,5 +1,5 @@
-import type {SignalValue, SimpleSignal} from '@revideo/core';
-import {createSignal, map, transformScalar} from '@revideo/core';
+import type {SignalValue, SimpleSignal} from '@twick/core';
+import {createSignal, map, transformScalar} from '@twick/core';
 
 /**
  * All possible CSS filter names.

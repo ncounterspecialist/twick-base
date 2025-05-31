@@ -6,11 +6,11 @@ import type {Plugin} from 'vite';
 export function settingsPlugin(): Plugin {
   const settingsId = 'virtual:settings.meta';
   const resolvedSettingsId = '\0' + settingsId;
-  const settingsPath = path.resolve(os.homedir(), '.revideo/settings.json');
+  const settingsPath = path.resolve(os.homedir(), '.twick/settings.json');
   const outputDirectory = path.dirname(settingsPath);
 
   return {
-    name: 'revideo:settings',
+    name: 'twick:settings',
 
     resolveId(id) {
       if (id === settingsId) {
@@ -32,7 +32,7 @@ export function settingsPlugin(): Plugin {
     },
 
     configureServer(server) {
-      server.ws.on('revideo:meta', async ({source, data}, client) => {
+      server.ws.on('twick:meta', async ({source, data}, client) => {
         if (source !== resolvedSettingsId) {
           return;
         }
@@ -59,7 +59,7 @@ export function settingsPlugin(): Plugin {
           ]);
         }
 
-        client.send('revideo:meta-ack', {source});
+        client.send('twick:meta-ack', {source});
       });
     },
   };

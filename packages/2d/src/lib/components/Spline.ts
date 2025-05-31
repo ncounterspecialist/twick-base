@@ -3,14 +3,14 @@ import type {
   SerializedVector2,
   SignalValue,
   SimpleSignal,
-} from '@revideo/core';
+} from '@twick/core';
 import {
   BBox,
   Vector2,
   transformVectorAsPoint,
   unwrap,
   useLogger,
-} from '@revideo/core';
+} from '@twick/core';
 import type {CurveProfile, KnotInfo} from '../curves';
 import {CubicBezierSegment, getBezierSplineProfile} from '../curves';
 import type {PolynomialSegment} from '../curves/PolynomialSegment';

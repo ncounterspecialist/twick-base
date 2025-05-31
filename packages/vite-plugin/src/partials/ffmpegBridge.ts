@@ -1,10 +1,10 @@
-import type {FFmpegExporterSettings} from '@revideo/ffmpeg';
+import type {FFmpegExporterSettings} from '@twick/ffmpeg';
 import {
   FFmpegExporterServer,
   VideoFrameExtractor,
   generateAudio,
   mergeMedia,
-} from '@revideo/ffmpeg';
+} from '@twick/ffmpeg';
 import {existsSync, unlinkSync} from 'fs';
 import type {IncomingMessage, ServerResponse} from 'http';
 import type {Plugin, WebSocketServer} from 'vite';
@@ -20,7 +20,7 @@ interface ExporterPluginConfig {
 
 export function ffmpegBridgePlugin({output}: ExporterPluginConfig): Plugin {
   return {
-    name: 'revideo/ffmpeg',
+    name: 'twick/ffmpeg',
 
     configureServer(server) {
       const ffmpegBridge = new FFmpegBridge(server.ws, {output});
@@ -88,7 +88,7 @@ export function ffmpegBridgePlugin({output}: ExporterPluginConfig): Plugin {
       );
 
       server.middlewares.use(
-        '/revideo-ffmpeg-decoder/video-frame',
+        '/twick-ffmpeg-decoder/video-frame',
         (req, res) =>
           handlePostRequest(req, res, async data => {
             const {frame, width, height} =
@@ -100,14 +100,14 @@ export function ffmpegBridgePlugin({output}: ExporterPluginConfig): Plugin {
           }),
       );
 
-      server.middlewares.use('/revideo-ffmpeg-decoder/finished', (req, res) => {
+      server.middlewares.use('/twick-ffmpeg-decoder/finished', (req, res) => {
         handlePostRequest(req, res, async () => {
           await ffmpegBridge.handleRenderFinished();
         });
       });
 
       server.middlewares.use(
-        '/revideo-ffmpeg-decoder/download-video-chunks',
+        '/twick-ffmpeg-decoder/download-video-chunks',
         (req, res) =>
           handlePostRequest(req, res, async videoDurations => {
             const downloadedPaths =
@@ -133,7 +133,7 @@ export class FFmpegBridge {
     private readonly ws: WebSocketServer,
     private readonly config: ExporterPluginConfig,
   ) {
-    ws.on('revideo:ffmpeg-exporter', this.handleMessage);
+    ws.on('twick:ffmpeg-exporter', this.handleMessage);
   }
 
   private handleMessage = async ({method, data}: BrowserRequest) => {
@@ -173,7 +173,7 @@ export class FFmpegBridge {
   };
 
   private respondSuccess(method: string, data: any = {}) {
-    this.ws.send('revideo:ffmpeg-exporter-ack', {
+    this.ws.send('twick:ffmpeg-exporter-ack', {
       status: 'success',
       method,
       data,
@@ -181,7 +181,7 @@ export class FFmpegBridge {
   }
 
   private respondError(method: string, message = 'Unknown error.') {
-    this.ws.send('revideo:ffmpeg-exporter-ack', {
+    this.ws.send('twick:ffmpeg-exporter-ack', {
       status: 'error',
       method,
       message,

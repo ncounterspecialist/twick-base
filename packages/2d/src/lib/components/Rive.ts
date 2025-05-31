@@ -1,5 +1,5 @@
-import type {SignalValue, SimpleSignal} from '@revideo/core';
-import {BBox, useThread} from '@revideo/core';
+import type {SignalValue, SimpleSignal} from '@twick/core';
+import {BBox, useThread} from '@twick/core';
 import type {
   Artboard,
   File,

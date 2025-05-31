@@ -9,7 +9,7 @@ export default defineConfig({
       fileName: 'main',
     },
     rollupOptions: {
-      external: ['@revideo/core'],
+      external: ['@twick/core'],
     },
   },
   plugins: [

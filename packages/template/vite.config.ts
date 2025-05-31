@@ -6,18 +6,18 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: '@revideo/ui',
-        replacement: '@revideo/ui/src/main.tsx',
+        find: '@twick/ui',
+        replacement: '@twick/ui/src/main.tsx',
       },
       {
-        find: '@revideo/2d/editor',
-        replacement: '@revideo/2d/src/editor',
+        find: '@twick/2d/editor',
+        replacement: '@twick/2d/src/editor',
       },
       {
-        find: /@revideo\/2d(\/lib)?/,
-        replacement: '@revideo/2d/src/lib',
+        find: /@twick\/2d(\/lib)?/,
+        replacement: '@twick/2d/src/lib',
       },
-      {find: '@revideo/core', replacement: '@revideo/core/src'},
+      {find: '@twick/core', replacement: '@twick/core/src'},
     ],
   },
   plugins: [

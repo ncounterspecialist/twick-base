@@ -1,5 +1,5 @@
 {
-  "name": "@revideo/examples",
+  "name": "@twick/examples",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -7,12 +7,12 @@
     "build": "tsc && vite build --base /examples/"
   },
   "dependencies": {
-    "@revideo/2d": "*",
-    "@revideo/core": "*",
-    "@revideo/ffmpeg": "*"
+    "@twick/2d": "*",
+    "@twick/core": "*",
+    "@twick/ffmpeg": "*"
   },
   "devDependencies": {
-    "@revideo/ui": "*",
-    "@revideo/vite-plugin": "*"
+    "@twick/ui": "*",
+    "@twick/vite-plugin": "*"
   }
 }

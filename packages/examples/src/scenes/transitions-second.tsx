@@ -1,11 +1,11 @@
-import {Rect, Txt, makeScene2D} from '@revideo/2d';
+import {Rect, Txt, makeScene2D} from '@twick/2d';
 import {
   Direction,
   all,
   createRef,
   slideTransition,
   waitFor,
-} from '@revideo/core';
+} from '@twick/core';
 
 export default makeScene2D('transitions-second', function* (view) {
   const rect = createRef<Rect>();

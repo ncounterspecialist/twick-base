@@ -1,6 +1,6 @@
-import type {RenderVideoUserProjectSettings} from '@revideo/core';
-import type {FfmpegSettings} from '@revideo/ffmpeg';
-import {ffmpegSettings} from '@revideo/ffmpeg';
+import type {RenderVideoUserProjectSettings} from '@twick/core';
+import type {FfmpegSettings} from '@twick/ffmpeg';
+import {ffmpegSettings} from '@twick/ffmpeg';
 import * as fs from 'fs';
 import * as path from 'path';
 import type {Plugin} from 'vite';
@@ -52,13 +52,13 @@ export function rendererPlugin(
     : JSON.stringify({});
 
   return {
-    name: 'revideo-renderer-plugin',
+    name: 'twick-renderer-plugin',
 
     async load(id) {
       if (id.startsWith('\x00virtual:renderer')) {
         return `\
-            import {render} from '@revideo/renderer/lib/client/render';
-            import {Vector2} from '@revideo/core';
+            import {render} from '@twick/renderer/lib/client/render';
+            import {Vector2} from '@twick/core';
             import project from '${projectFile}';
 
             // Read video variables

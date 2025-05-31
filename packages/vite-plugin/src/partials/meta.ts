@@ -6,7 +6,7 @@ export function metaPlugin(): Plugin {
   const timeStamps: Record<string, number> = {};
   let config: ResolvedConfig;
   return {
-    name: 'revideo:meta',
+    name: 'twick:meta',
 
     configResolved(resolvedConfig) {
       config = resolvedConfig;
@@ -24,7 +24,7 @@ export function metaPlugin(): Plugin {
 
       /* language=typescript */
       return `\
-import {MetaFile} from '@revideo/core';
+import {MetaFile} from '@twick/core';
 let meta;
 if (import.meta.hot) {
   meta = import.meta.hot.data.meta;
@@ -40,7 +40,7 @@ export default meta;
     },
 
     configureServer(server) {
-      server.ws.on('revideo:meta', async ({source, data}, client) => {
+      server.ws.on('twick:meta', async ({source, data}, client) => {
         // Ignore virtual meta files.
         if (source.startsWith('\0')) {
           return;
@@ -54,7 +54,7 @@ export default meta;
             'utf8',
           );
         }
-        client.send('revideo:meta-ack', {source});
+        client.send('twick:meta-ack', {source});
       });
     },
 

@@ -1,4 +1,4 @@
-export function Revideo() {
+export function Twick() {
   return (
     <svg
       viewBox="0 0 36 36"

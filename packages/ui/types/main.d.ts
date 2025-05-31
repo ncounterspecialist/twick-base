@@ -1,4 +1,4 @@
-import type {Project} from '@revideo/core';
+import type {Project} from '@twick/core';
 
 export function editor(project: Project): void;
 

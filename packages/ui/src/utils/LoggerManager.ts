@@ -1,5 +1,5 @@
-import type {LogPayload, Logger} from '@revideo/core';
-import {EventDispatcher, LogLevel, ValueDispatcher} from '@revideo/core';
+import type {LogPayload, Logger} from '@twick/core';
+import {EventDispatcher, LogLevel, ValueDispatcher} from '@twick/core';
 
 export class LoggerManager {
   public get onInspected() {

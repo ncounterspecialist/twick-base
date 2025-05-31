@@ -1,4 +1,4 @@
-import {Spacing} from '@revideo/core';
+import {Spacing} from '@twick/core';
 import {compound} from './compound';
 import {wrapper} from './signal';
 

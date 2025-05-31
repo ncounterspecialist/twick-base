@@ -22,6 +22,6 @@ const config: Config = {
       },
     },
   },
-  important: '.revideo-player-root',
+  important: '.twick-player-root',
 };
 export default config;

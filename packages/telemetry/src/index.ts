@@ -3,7 +3,7 @@ import os from 'os';
 import path from 'path';
 import {PostHog} from 'posthog-node';
 
-const Client = new PostHog('phc_YpKoFD7smPe4SXRtVyMW766uP9AjUwnuRJ8hh2EJcVv', {
+const Client = new PostHog('test-key', {
   host: 'https://eu.posthog.com',
 });
 
@@ -12,11 +12,11 @@ process.on('beforeExit', async () => {
 });
 
 export enum EventName {
-  RenderStarted = 'revideo-render-started',
-  ServerStarted = 'revideo-server-started',
-  CLICommand = 'revideo-cli-command',
-  CreateCommand = 'revideo-create-command',
-  Error = 'revideo-error',
+  RenderStarted = 'twick-render-started',
+  ServerStarted = 'twick-server-started',
+  CLICommand = 'twick-cli-command',
+  CreateCommand = 'twick-create-command',
+  Error = 'twick-error',
 }
 
 async function getCurrentVersion() {
@@ -38,7 +38,7 @@ async function getCurrentVersion() {
 async function getDistinctId() {
   try {
     return await fs.promises.readFile(
-      path.resolve(os.homedir(), '.revideo/id.txt'),
+      path.resolve(os.homedir(), '.twick/id.txt'),
       'utf-8',
     );
   } catch (e) {

@@ -1,4 +1,4 @@
-import type {Plugin} from '@revideo/core';
+import type {Plugin} from '@twick/core';
 import type {FunctionComponent} from 'preact';
 
 /**

@@ -1,11 +1,11 @@
-import {transformVectorAsPoint, Vector2} from '@revideo/core';
-import type {PluginOverlayConfig} from '@revideo/ui';
+import {transformVectorAsPoint, Vector2} from '@twick/core';
+import type {PluginOverlayConfig} from '@twick/ui';
 import {
   MouseButton,
   OverlayWrapper,
   useViewportContext,
   useViewportMatrix,
-} from '@revideo/ui';
+} from '@twick/ui';
 import type {ComponentChildren} from 'preact';
 import {usePluginState} from './Provider';
 

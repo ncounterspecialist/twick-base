@@ -1,5 +1,5 @@
-import {Circle, makeScene2D} from '@revideo/2d';
-import {useLogger, waitFor} from '@revideo/core';
+import {Circle, makeScene2D} from '@twick/2d';
+import {useLogger, waitFor} from '@twick/core';
 
 export default makeScene2D('logging', function* (view) {
   const logger = useLogger();

@@ -1,4 +1,4 @@
-import {Stage} from '@revideo/core';
+import {Stage} from '@twick/core';
 import type {JSX} from 'preact';
 import {useEffect, useState} from 'preact/hooks';
 import {useApplication} from '../../contexts';

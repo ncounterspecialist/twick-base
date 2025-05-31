@@ -1,5 +1,5 @@
 {
-  "name": "@revideo/e2e",
+  "name": "@twick/e2e",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,14 +8,14 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@revideo/2d": "*",
-    "@revideo/core": "*",
-    "@revideo/ffmpeg": "*",
+    "@twick/2d": "*",
+    "@twick/core": "*",
+    "@twick/ffmpeg": "*",
     "jest-image-snapshot": "^6.2.0",
     "puppeteer": "^23.4.0"
   },
   "devDependencies": {
-    "@revideo/ui": "*",
-    "@revideo/vite-plugin": "*"
+    "@twick/ui": "*",
+    "@twick/vite-plugin": "*"
   }
 }

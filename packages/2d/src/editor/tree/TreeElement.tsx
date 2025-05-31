@@ -1,5 +1,5 @@
 import type {Signal} from '@preact/signals';
-import {Collapse, Toggle} from '@revideo/ui';
+import {Collapse, Toggle} from '@twick/ui';
 import {clsx} from 'clsx';
 import type {ComponentChildren, JSX} from 'preact';
 import type {Ref} from 'preact/hooks';

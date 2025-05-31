@@ -1,4 +1,4 @@
-import {Circle, makeScene2D} from '@revideo/2d';
+import {Circle, makeScene2D} from '@twick/2d';
 
 export default makeScene2D('circle', function* (view) {
   view.add(

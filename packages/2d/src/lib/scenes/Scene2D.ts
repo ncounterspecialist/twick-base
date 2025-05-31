@@ -6,14 +6,14 @@ import type {
   InspectedElement,
   Scene,
   ThreadGeneratorFactory,
-} from '@revideo/core';
+} from '@twick/core';
 import {
   GeneratorScene,
   SceneRenderEvent,
   Vector2,
   transformVectorAsPoint,
   useLogger,
-} from '@revideo/core';
+} from '@twick/core';
 import type {Node} from '../components';
 import {Audio, Media, Video, View2D} from '../components';
 
@@ -29,7 +29,7 @@ export class Scene2D extends GeneratorScene<View2D> implements Inspectable {
     super(description);
     this.recreateView();
     if (import.meta.hot) {
-      import.meta.hot.on('revideo:assets', () => {
+      import.meta.hot.on('twick:assets', () => {
         this.assetHash = Date.now().toString();
         this.getView().assetHash(this.assetHash);
       });

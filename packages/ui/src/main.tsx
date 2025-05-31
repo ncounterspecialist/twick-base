@@ -6,7 +6,7 @@ import {
   experimentalLog,
   getFullPreviewSettings,
   type Project,
-} from '@revideo/core';
+} from '@twick/core';
 import type {ComponentChild} from 'preact';
 import {render} from 'preact';
 import {Editor} from './Editor';
@@ -46,7 +46,7 @@ export function editor(project: Project) {
 
   if (!project.experimentalFeatures) {
     for (const plugin of project.plugins) {
-      if (plugin.name.startsWith('@revideo')) {
+      if (plugin.name.startsWith('@twick')) {
         continue;
       }
 

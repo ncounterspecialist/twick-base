@@ -1,10 +1,10 @@
-import {LogLevel} from '@revideo/core';
+import {LogLevel} from '@twick/core';
 import {useEffect, useRef, useState} from 'preact/hooks';
 import {useApplication, usePanels} from '../../contexts';
 import {useReducedMotion} from '../../hooks';
 import {EditorPanel} from '../../signals';
 import {shake} from '../animations';
-import {Bug, HourglassBottom, Movie, Revideo, School, Science} from '../icons';
+import {Bug, HourglassBottom, Movie, Twick, School, Science} from '../icons';
 import {Badge, Space, Tab, TabGroup, TabLink, Tabs} from '../tabs';
 import styles from './Navigation.module.scss';
 
@@ -35,7 +35,7 @@ export function Navigation() {
         id="project-selection-link"
         href={window.location.pathname === '/' ? undefined : '../'}
       >
-        <Revideo />
+        <Twick />
       </TabLink>
       <TabGroup tab={sidebar.current.value} setTab={tab => sidebar.set(tab)}>
         {/* eslint-disable-next-line @typescript-eslint/naming-convention */}

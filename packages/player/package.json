@@ -1,12 +1,12 @@
 {
-  "name": "@revideo/player",
-  "version": "0.10.4",
+  "name": "@twick/player",
+  "version": "0.13.0",
   "description": "A custom element for displaying animations made with revideo",
   "main": "dist/main.js",
   "types": "types/main.d.ts",
   "author": "revideo",
   "homepage": "https://re.video/",
-  "bugs": "https://github.com/havenhq/revideo/issues",
+  "bugs": "https://github.com/ncounterspecialist/twick-base/issues",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -22,7 +22,7 @@
     "types"
   ],
   "devDependencies": {
-    "@revideo/core": "0.10.4",
+    "@twick/core": "^0.13.0",
     "sass": "^1.58.0",
     "terser": "^5.16.1"
   }

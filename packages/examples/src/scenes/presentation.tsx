@@ -1,4 +1,4 @@
-import {Rect, Txt, makeScene2D} from '@revideo/2d';
+import {Rect, Txt, makeScene2D} from '@twick/2d';
 import {
   Color,
   all,
@@ -8,7 +8,7 @@ import {
   createSignal,
   easeInOutCubic,
   loop,
-} from '@revideo/core';
+} from '@twick/core';
 
 const YELLOW = '#FFC66D';
 const RED = '#FF6470';

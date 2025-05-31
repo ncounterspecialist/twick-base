@@ -18,7 +18,7 @@ export * from './PhotoCamera';
 export * from './PlayArrow';
 export * from './Recenter';
 export * from './Repeat';
-export * from './Revideo';
+export * from './Twick';
 export * from './Schedule';
 export * from './School';
 export * from './Science';

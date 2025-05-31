@@ -1,7 +1,7 @@
 import styles from './Console.module.scss';
 
-import type {LogPayload} from '@revideo/core';
-import {LogLevel} from '@revideo/core';
+import type {LogPayload} from '@twick/core';
+import {LogLevel} from '@twick/core';
 import clsx from 'clsx';
 import {useEffect, useMemo, useState} from 'preact/hooks';
 import {useApplication} from '../../contexts';

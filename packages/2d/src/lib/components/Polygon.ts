@@ -1,5 +1,5 @@
-import type {SerializedVector2, SignalValue, SimpleSignal} from '@revideo/core';
-import {BBox, Vector2} from '@revideo/core';
+import type {SerializedVector2, SignalValue, SimpleSignal} from '@twick/core';
+import {BBox, Vector2} from '@twick/core';
 import type {CurveProfile} from '../curves';
 import {getPolylineProfile} from '../curves';
 import {computed, initial, signal} from '../decorators';
@@ -38,8 +38,8 @@ export interface PolygonProps extends CurveProps {
  * @preview
  * ```tsx editor
  * // snippet Polygon
- * import {makeScene2D, Polygon} from '@revideo/2d';
- * import {createRef} from '@revideo/core';
+ * import {makeScene2D, Polygon} from '@twick/2d';
+ * import {createRef} from '@twick/core';
  *
  * export default makeScene2D(function* (view) {
  *   const ref = createRef<Polygon>();
@@ -56,7 +56,7 @@ export interface PolygonProps extends CurveProps {
  * });
  *
  * // snippet Pentagon outline
- * import {makeScene2D, Polygon} from '@revideo/2d';
+ * import {makeScene2D, Polygon} from '@twick/2d';
  *
  * export default makeScene2D(function* (view) {
  *   view.add(

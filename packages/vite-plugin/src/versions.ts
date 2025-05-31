@@ -3,9 +3,9 @@ import path from 'path';
 
 export function getVersions() {
   return {
-    core: loadVersion('@revideo/core'),
-    two: loadVersion('@revideo/2d'),
-    ui: loadVersion('@revideo/ui'),
+    core: loadVersion('@twick/core'),
+    two: loadVersion('@twick/2d'),
+    ui: loadVersion('@twick/ui'),
     vitePlugin: loadVersion('..'),
   };
 }

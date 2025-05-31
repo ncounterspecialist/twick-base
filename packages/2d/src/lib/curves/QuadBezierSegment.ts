@@ -1,4 +1,4 @@
-import {Vector2, lazy} from '@revideo/core';
+import {Vector2, lazy} from '@twick/core';
 import {quadraticCurveTo} from '../utils';
 import {Polynomial2D} from './Polynomial2D';
 import {PolynomialSegment} from './PolynomialSegment';

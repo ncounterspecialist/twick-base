@@ -16,7 +16,7 @@ export function projectsPlugin({
   // TODO(refactor): use version information
   // const versions = JSON.stringify(getVersions());
   return {
-    name: 'revideo:project',
+    name: 'twick:project',
 
     config(config) {
       return {
@@ -35,7 +35,7 @@ export function projectsPlugin({
         },
         esbuild: {
           jsx: 'automatic',
-          jsxImportSource: '@revideo/2d/lib',
+          jsxImportSource: '@twick/2d/lib',
         },
         optimizeDeps: {
           entries: projects.list.map(project => project.url),

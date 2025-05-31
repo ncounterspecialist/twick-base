@@ -1,7 +1,7 @@
-import {Img, makeScene2D} from '@revideo/2d';
-import {all, createRef} from '@revideo/core';
+import {Img, makeScene2D} from '@twick/2d';
+import {all, createRef} from '@twick/core';
 
-import logoSvg from '@revideo/examples/assets/logo.svg';
+import logoSvg from '@twick/examples/assets/logo.svg';
 
 export default makeScene2D('media-image', function* (view) {
   const imageRef = createRef<Img>();

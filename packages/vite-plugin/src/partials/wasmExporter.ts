@@ -8,7 +8,7 @@ import type {Plugin} from 'vite';
 
 export function wasmExporterPlugin(): Plugin {
   return {
-    name: 'revideo:mp4-wasm',
+    name: 'twick:mp4-wasm',
 
     configureServer(server) {
       // Virtual file for mp4-wasm

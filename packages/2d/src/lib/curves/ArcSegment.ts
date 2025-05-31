@@ -5,7 +5,7 @@ import {
   Vector2,
   lazy,
   transformVector,
-} from '@revideo/core';
+} from '@twick/core';
 import {View2D} from '../components/View2D';
 import type {CurvePoint} from './CurvePoint';
 import {Segment} from './Segment';

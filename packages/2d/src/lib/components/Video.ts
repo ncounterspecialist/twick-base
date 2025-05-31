@@ -1,5 +1,5 @@
-import type {SerializedVector2, SignalValue, SimpleSignal} from '@revideo/core';
-import {BBox, DependencyContext, PlaybackState} from '@revideo/core';
+import type {SerializedVector2, SignalValue, SimpleSignal} from '@twick/core';
+import {BBox, DependencyContext, PlaybackState} from '@twick/core';
 import Hls from 'hls.js';
 import {computed, initial, nodeName, signal} from '../decorators';
 import type {DesiredLength} from '../partials';
@@ -107,25 +107,77 @@ export class Video extends Media {
   @computed()
   private video(): HTMLVideoElement {
     const src = this.src();
-    const key = `${this.key}/${src}`;
+    
+    // Use a temporary key for undefined src to avoid conflicts
+    const key = `${this.key}/${src || 'pending'}`;
+    
     let video = Video.pool[key];
     if (!video) {
       video = document.createElement('video');
       video.crossOrigin = 'anonymous';
 
-      const parsedSrc = new URL(src, window.location.origin);
-      if (parsedSrc.pathname.endsWith('.m3u8')) {
-        const hls = new Hls();
-        hls.loadSource(src);
-        hls.attachMedia(video);
-      } else {
-        video.src = src;
+      // Only set src if it's valid, otherwise leave it empty
+      if (src && src !== 'undefined') {
+        try {
+          const parsedSrc = new URL(src, window.location.origin);
+          
+          if (parsedSrc.pathname.endsWith('.m3u8')) {
+            const hls = new Hls();
+            hls.loadSource(src);
+            hls.attachMedia(video);
+          } else {
+            video.src = src;
+          }
+        } catch (error) {
+          // Fallback to direct assignment
+          video.src = src;
+        }
       }
 
       Video.pool[key] = video;
+    } else if (src && src !== 'undefined' && video.src !== src) {
+      // Update existing video element if src has changed and is now valid
+      try {
+        const parsedSrc = new URL(src, window.location.origin);
+        
+        if (parsedSrc.pathname.endsWith('.m3u8')) {
+          const hls = new Hls();
+          hls.loadSource(src);
+          hls.attachMedia(video);
+        } else {
+          video.src = src;
+        }
+      } catch (error) {
+        // Fallback to direct assignment
+        video.src = src;
+      }
+      
+      // Move video to correct pool key
+      delete Video.pool[key];
+      const newKey = `${this.key}/${src}`;
+      Video.pool[newKey] = video;
+    }
+
+    // If src is still undefined, wait for it to become available
+    if (!src || src === 'undefined') {
+      DependencyContext.collectPromise(
+        new Promise<void>(resolve => {
+          // Check periodically for valid src
+          const checkSrc = () => {
+            const currentSrc = this.src();
+            if (currentSrc && currentSrc !== 'undefined') {
+              resolve();
+            } else {
+              setTimeout(checkSrc, 10);
+            }
+          };
+          checkSrc();
+        }),
+      );
     }
 
     const weNeedToWait = this.waitForCanPlayNecessary(video);
+    
     if (!weNeedToWait) {
       return video;
     }
@@ -172,6 +224,7 @@ export class Video extends Media {
 
     const playing =
       this.playing() && time < video.duration && video.playbackRate > 0;
+    
     if (playing) {
       if (video.paused) {
         DependencyContext.collectPromise(video.play());
@@ -283,6 +336,9 @@ export class Video extends Media {
   }
 
   protected override async draw(context: CanvasRenderingContext2D) {
+    // Auto-start playback if Revideo is playing but media isn't
+    this.autoPlayBasedOnRevideo();
+    
     this.drawShape(context);
     const alpha = this.alpha();
     if (alpha > 0) {
@@ -308,15 +364,23 @@ export class Video extends Media {
 
   protected override applyFlex() {
     super.applyFlex();
-    const video = this.video();
-    this.element.style.aspectRatio = (
-      this.ratio() ?? video.videoWidth / video.videoHeight
-    ).toString();
+    try {
+      const video = this.video();
+      // Only set aspect ratio if video element is available and has valid dimensions
+      if (video && video.videoWidth > 0 && video.videoHeight > 0) {
+        this.element.style.aspectRatio = (
+          this.ratio() ?? video.videoWidth / video.videoHeight
+        ).toString();
+      }
+    } catch (error) {
+      // If video element is not ready yet, skip setting aspect ratio
+      // It will be set later when the video becomes available
+    }
   }
 
   public override remove() {
     super.remove();
-    dropExtractor(this.key, this.video().src);
+    dropExtractor(this.key, this.src());
     return this;
   }
 

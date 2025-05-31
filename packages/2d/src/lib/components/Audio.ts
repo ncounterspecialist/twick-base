@@ -1,4 +1,4 @@
-import {DependencyContext, PlaybackState} from '@revideo/core';
+import {DependencyContext, PlaybackState} from '@twick/core';
 import {computed, nodeName} from '../decorators';
 import type {MediaProps} from './Media';
 import {Media} from './Media';
@@ -26,13 +26,47 @@ export class Audio extends Media {
   @computed()
   protected audio(): HTMLAudioElement {
     const src = this.src();
-    const key = `${this.key}/${src}`;
+    
+    // Use a temporary key for undefined src to avoid conflicts
+    const key = `${this.key}/${src || 'pending'}`;
+    
     let audio = Audio.pool[key];
     if (!audio) {
       audio = document.createElement('audio');
       audio.crossOrigin = 'anonymous';
-      audio.src = src;
+      
+      // Only set src if it's valid, otherwise leave it empty
+      if (src && src !== 'undefined') {
+        audio.src = src;
+      }
+      
       Audio.pool[key] = audio;
+    } else if (src && src !== 'undefined' && audio.src !== src) {
+      // Update existing audio element if src has changed and is now valid
+      audio.src = src;
+      
+      // Move audio to correct pool key
+      delete Audio.pool[key];
+      const newKey = `${this.key}/${src}`;
+      Audio.pool[newKey] = audio;
+    }
+
+    // If src is still undefined, wait for it to become available
+    if (!src || src === 'undefined') {
+      DependencyContext.collectPromise(
+        new Promise<void>(resolve => {
+          // Check periodically for valid src
+          const checkSrc = () => {
+            const currentSrc = this.src();
+            if (currentSrc && currentSrc !== 'undefined') {
+              resolve();
+            } else {
+              setTimeout(checkSrc, 10);
+            }
+          };
+          checkSrc();
+        }),
+      );
     }
 
     const weNeedToWait = this.waitForCanPlayNecessary(audio);
@@ -116,6 +150,9 @@ export class Audio extends Media {
   }
 
   protected override async draw(context: CanvasRenderingContext2D) {
+    // Auto-start playback if Revideo is playing but media isn't
+    this.autoPlayBasedOnRevideo();
+    
     const playbackState = this.view().playbackState();
 
     playbackState === PlaybackState.Playing ||

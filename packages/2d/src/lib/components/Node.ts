@@ -13,7 +13,7 @@ import type {
   ThreadGenerator,
   TimingFunction,
   Vector2Signal,
-} from '@revideo/core';
+} from '@twick/core';
 import {
   BBox,
   DependencyContext,
@@ -34,7 +34,7 @@ import {
   transformVectorAsPoint,
   unwrap,
   useLogger,
-} from '@revideo/core';
+} from '@twick/core';
 import {
   NODE_NAME,
   cloneable,

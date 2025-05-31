@@ -12,7 +12,7 @@ export class ImageCommunication {
     duration: number,
     fps: number,
   ) {
-    const response = await fetch('/revideo-ffmpeg-decoder/video-frame', {
+    const response = await fetch('/twick-ffmpeg-decoder/video-frame', {
       method: 'POST',
       headers: {
         // eslint-disable-next-line

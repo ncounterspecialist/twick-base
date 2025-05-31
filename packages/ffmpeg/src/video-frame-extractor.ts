@@ -1,4 +1,4 @@
-import {EventName, sendEvent} from '@revideo/telemetry';
+import {EventName, sendEvent} from '@twick/telemetry';
 import * as ffmpeg from 'fluent-ffmpeg';
 import * as fs from 'fs';
 import * as os from 'os';
@@ -96,7 +96,7 @@ export class VideoFrameExtractor {
     startTime: number,
     endTime: number,
   ) {
-    const outputDir = path.join(os.tmpdir(), `revideo-decoder-chunks`);
+    const outputDir = path.join(os.tmpdir(), `twick-decoder-chunks`);
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, {recursive: true});
     }

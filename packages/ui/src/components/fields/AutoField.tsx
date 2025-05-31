@@ -1,4 +1,4 @@
-import {Spacing, Vector2, isType} from '@revideo/core';
+import {Spacing, Vector2, isType} from '@twick/core';
 import type {FunctionComponent} from 'preact';
 import {ArrayField} from './ArrayField';
 import {NumberField} from './NumberField';

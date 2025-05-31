@@ -1,6 +1,6 @@
-import {makeScene2D} from '@revideo/2d';
-import {createRef, waitFor} from '@revideo/core';
-import {Switch} from '@revideo/examples/src/components/Switch';
+import {makeScene2D} from '@twick/2d';
+import {createRef, waitFor} from '@twick/core';
+import {Switch} from '@twick/examples/src/components/Switch';
 // see this import for the component ^
 
 // usage of the component:

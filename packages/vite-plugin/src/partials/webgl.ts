@@ -20,7 +20,7 @@ const INCLUDE_REGEX = /^#include "([^"]+)"/;
 export function webglPlugin(): Plugin {
   let config: ResolvedConfig;
   return {
-    name: 'revideo:webgl',
+    name: 'twick:webgl',
 
     configResolved(resolvedConfig) {
       config = resolvedConfig;

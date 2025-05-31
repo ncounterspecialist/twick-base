@@ -1,12 +1,12 @@
-import type {Project} from '@revideo/core';
-import {Player, Stage, getFullPreviewSettings} from '@revideo/core';
+import type {Project} from '@twick/core';
+import {Player, Stage, getFullPreviewSettings} from '@twick/core';
 
-import {Vector2} from '@revideo/core';
+import {Vector2} from '@twick/core';
 import styles from './styles.scss?inline';
 import html from './template.html?raw';
 
 const TEMPLATE = `<style>${styles}</style>${html}`;
-const ID = 'revideo-player';
+const ID = 'twick-player';
 
 enum State {
   Initial = 'initial',

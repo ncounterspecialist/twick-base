@@ -22,7 +22,7 @@ async function getRiveWasmPath() {
 
 export function rivePlugin(): Plugin {
   return {
-    name: 'revideo:rive-wasm',
+    name: 'twick:rive-wasm',
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         if (req.url && req.url === '/@rive-wasm') {

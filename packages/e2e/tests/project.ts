@@ -1,4 +1,4 @@
-import {Color, makeProject, Vector2} from '@revideo/core';
+import {Color, makeProject, Vector2} from '@twick/core';
 
 import circle from './scenes/circle';
 import rect from './scenes/rect';
@@ -21,7 +21,7 @@ export default makeProject({
       resolutionScale: 1,
       colorSpace: 'srgb',
       exporter: {
-        name: '@revideo/core/image-sequence',
+        name: '@twick/core/image-sequence',
         options: {
           fileType: 'image/png',
           quality: 100,

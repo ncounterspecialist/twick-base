@@ -1,4 +1,4 @@
-import {Color} from '@revideo/core';
+import {Color} from '@twick/core';
 import {signal, wrapper} from './signal';
 
 export function colorSignal(): PropertyDecorator {

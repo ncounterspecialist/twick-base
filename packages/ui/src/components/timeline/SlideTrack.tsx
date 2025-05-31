@@ -1,4 +1,4 @@
-import type {Scene} from '@revideo/core';
+import type {Scene} from '@twick/core';
 import clsx from 'clsx';
 import {useApplication} from '../../contexts';
 import {useSubscribableValue} from '../../hooks';

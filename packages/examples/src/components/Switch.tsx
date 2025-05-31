@@ -1,11 +1,11 @@
-import type {NodeProps} from '@revideo/2d';
-import {Circle, Node, Rect, colorSignal, initial, signal} from '@revideo/2d';
+import type {NodeProps} from '@twick/2d';
+import {Circle, Node, Rect, colorSignal, initial, signal} from '@twick/2d';
 import type {
   ColorSignal,
   PossibleColor,
   SignalValue,
   SimpleSignal,
-} from '@revideo/core';
+} from '@twick/core';
 import {
   Color,
   all,
@@ -13,7 +13,7 @@ import {
   createSignal,
   easeInOutCubic,
   tween,
-} from '@revideo/core';
+} from '@twick/core';
 
 export interface SwitchProps extends NodeProps {
   initialState?: SignalValue<boolean>;

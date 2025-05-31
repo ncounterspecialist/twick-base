@@ -1,4 +1,4 @@
-import motionCanvas from '@revideo/vite-plugin';
+import motionCanvas from '@twick/vite-plugin';
 import {createServer} from 'vite';
 
 export async function launchEditor(projectPath: string, port: string) {

@@ -5,7 +5,7 @@ import type {Exporter} from './Exporter';
 import {download} from './download-videos';
 
 export class WasmExporter implements Exporter {
-  public static readonly id = '@revideo/core/wasm';
+  public static readonly id = '@twick/core/wasm';
   public static readonly displayName = 'Video (Wasm)';
 
   public static async create(project: Project, settings: RendererSettings) {
@@ -47,10 +47,10 @@ export class WasmExporter implements Exporter {
     formData.append('file', new Blob([buf], {type: 'video/mp4'}), 'video.mp4');
     formData.append(
       'tempDir',
-      `revideo-${this.settings.name}-${this.settings.hiddenFolderId}`,
+      `twick-${this.settings.name}-${this.settings.hiddenFolderId}`,
     );
 
-    await fetch('/revideo-ffmpeg-decoder/finished', {
+    await fetch('/twick-ffmpeg-decoder/finished', {
       method: 'POST',
       headers: {
         // eslint-disable-next-line
@@ -74,7 +74,7 @@ export class WasmExporter implements Exporter {
       method: 'POST',
       // TODO: add type and validate on the other side
       body: JSON.stringify({
-        tempDir: `revideo-${this.settings.name}-${this.settings.hiddenFolderId}`,
+        tempDir: `twick-${this.settings.name}-${this.settings.hiddenFolderId}`,
         assets,
         startFrame,
         endFrame,
@@ -85,7 +85,7 @@ export class WasmExporter implements Exporter {
 
   public async mergeMedia(): Promise<void> {
     const outputFilename = this.settings.name;
-    const tempDir = `revideo-${this.settings.name}-${this.settings.hiddenFolderId}`;
+    const tempDir = `twick-${this.settings.name}-${this.settings.hiddenFolderId}`;
 
     await fetch('/audio-processing/merge-media', {
       method: 'POST',

@@ -26,7 +26,7 @@ interface ServerResponse {
  * @internal
  */
 export class ImageExporter implements Exporter {
-  public static readonly id = '@revideo/core/image-sequence';
+  public static readonly id = '@twick/core/image-sequence';
   public static readonly displayName = 'Image sequence';
 
   public static async create(
@@ -40,7 +40,7 @@ export class ImageExporter implements Exporter {
 
   static {
     if (import.meta.hot) {
-      import.meta.hot.on('revideo:export-ack', response => {
+      import.meta.hot.on('twick:export-ack', response => {
         this.response.dispatch(response);
       });
     }
@@ -93,7 +93,7 @@ export class ImageExporter implements Exporter {
       }
 
       this.frameLookup.add(frame);
-      import.meta.hot!.send('revideo:export', {
+      import.meta.hot!.send('twick:export', {
         frame,
         sceneFrame,
         data: canvas.toDataURL(this.fileType, this.quality),

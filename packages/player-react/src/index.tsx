@@ -1,5 +1,5 @@
 'use client';
-import type {Player as CorePlayer, Project} from '@revideo/core';
+import type {Player as CorePlayer, Project} from '@twick/core';
 import type {ComponentProps} from 'react';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {Controls} from './controls';
@@ -21,7 +21,7 @@ declare global {
   namespace JSX {
     interface IntrinsicElements {
       // eslint-disable-next-line
-      'revideo-player': RevideoPlayerProps & ComponentProps<'div'>;
+      'twick-player': RevideoPlayerProps & ComponentProps<'div'>;
     }
   }
 }
@@ -213,7 +213,7 @@ export function Player({
   }
 
   return (
-    <div className="revideo-player-root" style={{display: 'contents'}}>
+    <div className="twick-player-root" style={{display: 'contents'}}>
       <div
         ref={wrapperRef}
         className="relative cursor-default focus:outline-none"
@@ -224,7 +224,7 @@ export function Player({
         onMouseLeave={() => setIsMouseOver(false)}
       >
         <div className="relative">
-          <revideo-player
+          <twick-player
             ref={playerRef}
             playing={String(playingState)}
             onClick={onClickHandler}

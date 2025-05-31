@@ -1,5 +1,5 @@
-import type {BBox, Spacing} from '@revideo/core';
-import {Color, Vector2} from '@revideo/core';
+import type {BBox, Spacing} from '@twick/core';
+import {Color, Vector2} from '@twick/core';
 import type {CanvasStyle, PossibleCanvasStyle} from '../partials';
 import {Gradient, Pattern} from '../partials';
 

@@ -1,6 +1,6 @@
 import type {Signal} from '@preact/signals';
 import {useSignal} from '@preact/signals';
-import type {Player, Project, Renderer} from '@revideo/core';
+import type {Player, Project, Renderer} from '@twick/core';
 import type {ComponentChildren} from 'preact';
 import {createContext} from 'preact';
 import {useContext, useRef} from 'preact/hooks';

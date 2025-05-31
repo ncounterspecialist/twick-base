@@ -60,7 +60,7 @@ export type ColorSignal<T> = Signal<PossibleColor, Color, T>;
  * Represents a color using RGBA values (0-1 range).
  */
 export class Color implements Type, WebGLConvertible {
-  public static symbol = Symbol.for('@revideo/core/types/Color');
+  public static symbol = Symbol.for('@twick/core/types/Color');
   public readonly symbol = Color.symbol;
 
   public readonly r: number;

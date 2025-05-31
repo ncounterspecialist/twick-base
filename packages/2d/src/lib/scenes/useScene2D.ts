@@ -1,4 +1,4 @@
-import {useScene} from '@revideo/core';
+import {useScene} from '@twick/core';
 import type {Scene2D} from './Scene2D';
 
 export function useScene2D(): Scene2D {

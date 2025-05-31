@@ -1,4 +1,4 @@
-import type {Vector2} from '@revideo/core';
+import type {Vector2} from '@twick/core';
 
 export interface CurveDrawingInfo {
   path: Path2D;

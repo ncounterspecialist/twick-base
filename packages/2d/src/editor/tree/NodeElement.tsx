@@ -1,6 +1,6 @@
 import {useComputed, useSignal, useSignalEffect} from '@preact/signals';
-import type {Node} from '@revideo/2d';
-import {NODE_NAME} from '@revideo/2d';
+import type {Node} from '@twick/2d';
+import {NODE_NAME} from '@twick/2d';
 import {useRef} from 'preact/hooks';
 import {usePluginState} from '../Provider';
 import {IconMap} from '../icons/IconMap';

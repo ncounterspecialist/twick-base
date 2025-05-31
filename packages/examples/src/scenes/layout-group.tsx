@@ -1,5 +1,5 @@
-import {Layout, Node, Rect, makeScene2D} from '@revideo/2d';
-import {createRef} from '@revideo/core';
+import {Layout, Node, Rect, makeScene2D} from '@twick/2d';
+import {createRef} from '@twick/core';
 
 export default makeScene2D('layout-group', function* (view) {
   const group = createRef<Node>();

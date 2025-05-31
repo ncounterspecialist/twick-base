@@ -1,11 +1,11 @@
 {
-  "name": "@revideo/telemetry",
-  "version": "0.10.4",
+  "name": "@twick/telemetry",
+  "version": "0.13.0",
   "description": "Telemetry for Revideo. Check the documentation to learn how to disable it.",
   "main": "dist/index.js",
   "author": "revideo",
   "homepage": "https://re.video/",
-  "bugs": "https://github.com/havenhq/revideo/issues",
+  "bugs": "https://github.com/ncounterspecialist/twick-base/issues",
   "license": "MIT",
   "scripts": {
     "dev": "tsc -w",

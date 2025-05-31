@@ -1,5 +1,5 @@
-import type {SerializedVector2} from '@revideo/core';
-import {clampRemap, Color, map, unwrap, Vector2} from '@revideo/core';
+import type {SerializedVector2} from '@twick/core';
+import {clampRemap, Color, map, unwrap, Vector2} from '@twick/core';
 import type {Code} from '../components';
 import type {CodeFragment} from './CodeFragment';
 import {parseCodeFragment} from './CodeFragment';

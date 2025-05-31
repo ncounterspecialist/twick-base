@@ -1,4 +1,4 @@
-/** @jsxImportSource @revideo/2d/lib */
+/** @jsxImportSource @twick/2d/lib */
 import {
   Gradient,
   Img,
@@ -8,8 +8,8 @@ import {
   Spline,
   Txt,
   makeScene2D,
-} from '@revideo/2d';
-import {Vector2, all, createRef, useScene, waitFor} from '@revideo/core';
+} from '@twick/2d';
+import {Vector2, all, createRef, useScene, waitFor} from '@twick/core';
 
 /**
  * Some example data to use in the scene when no data is provided
@@ -65,7 +65,7 @@ const exampleData = [
   6875821000, 6904033000, 6971558000, 6972735000,
 ];
 
-const exampleRepoName = 'redotvideo/revideo10';
+const exampleRepoName = 'redotvideo/twick10';
 const exampleRepoImage = 'https://avatars.githubusercontent.com/u/133898679';
 
 export default makeScene2D('scene 1', function* (view) {

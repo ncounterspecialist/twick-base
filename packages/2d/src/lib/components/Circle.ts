@@ -1,5 +1,5 @@
-import type {SerializedVector2, SignalValue, SimpleSignal} from '@revideo/core';
-import {BBox, DEG2RAD} from '@revideo/core';
+import type {SerializedVector2, SignalValue, SimpleSignal} from '@twick/core';
+import {BBox, DEG2RAD} from '@twick/core';
 import type {CurveProfile} from '../curves';
 import {getCircleProfile} from '../curves';
 import {computed, initial, nodeName, signal} from '../decorators';
@@ -36,7 +36,7 @@ export interface CircleProps extends CurveProps {
  * @preview
  * ```tsx editor
  * // snippet Simple circle
- * import {makeScene2D, Circle} from '@revideo/2d';
+ * import {makeScene2D, Circle} from '@twick/2d';
  *
  * export default makeScene2D(function* (view) {
  *   view.add(
@@ -48,7 +48,7 @@ export interface CircleProps extends CurveProps {
  * });
  *
  * // snippet Ellipse
- * import {makeScene2D, Circle} from '@revideo/2d';
+ * import {makeScene2D, Circle} from '@twick/2d';
  *
  * export default makeScene2D(function* (view) {
  *   view.add(
@@ -61,8 +61,8 @@ export interface CircleProps extends CurveProps {
  * });
  *
  * // snippet Sector (pie chart):
- * import {makeScene2D, Circle} from '@revideo/2d';
- * import {createRef} from '@revideo/core';
+ * import {makeScene2D, Circle} from '@twick/2d';
+ * import {createRef} from '@twick/core';
  *
  * export default makeScene2D(function* (view) {
  *   const ref = createRef<Circle>();
@@ -81,8 +81,8 @@ export interface CircleProps extends CurveProps {
  * });
  *
  * // snippet Arc:
- * import {makeScene2D, Circle} from '@revideo/2d';
- * import {createRef} from '@revideo/core';
+ * import {makeScene2D, Circle} from '@twick/2d';
+ * import {createRef} from '@twick/core';
  *
  * export default makeScene2D(function* (view) {
  *   const ref = createRef<Circle>();
@@ -101,8 +101,8 @@ export interface CircleProps extends CurveProps {
  * });
  *
  * // snippet Curve properties:
- * import {makeScene2D, Circle} from '@revideo/2d';
- * import {all, createRef, easeInCubic, easeOutCubic} from '@revideo/core';
+ * import {makeScene2D, Circle} from '@twick/2d';
+ * import {all, createRef, easeInCubic, easeOutCubic} from '@twick/core';
  *
  * export default makeScene2D(function* (view) {
  *   const ref = createRef<Circle>();

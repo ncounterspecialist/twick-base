@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 //@ts-check
-import {EventName, sendEvent} from '@revideo/telemetry';
+import {EventName, sendEvent} from '@twick/telemetry';
 import fs from 'fs';
 import kleur from 'kleur';
 import minimist from 'minimist';
@@ -93,7 +93,7 @@ async function run() {
       type: 'text',
       name: 'name',
       message: 'Project name',
-      initial: 'my-revideo-project',
+      initial: 'my-twick-project',
       validate: value =>
         isValidPackageName(value)
           ? true

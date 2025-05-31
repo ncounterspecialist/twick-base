@@ -1,5 +1,5 @@
-import type {PossibleVector2, SignalValue, Vector2Signal} from '@revideo/core';
-import {BBox, transformVectorAsPoint} from '@revideo/core';
+import type {PossibleVector2, SignalValue, Vector2Signal} from '@twick/core';
+import {BBox, transformVectorAsPoint} from '@twick/core';
 import type {CurveProfile} from '../curves';
 import {LineSegment} from '../curves';
 import {nodeName, vector2Signal} from '../decorators';
@@ -28,9 +28,9 @@ export interface RayProps extends CurveProps {
  *
  * @preview
  * ```tsx editor
- * import {makeScene2D} from '@revideo/2d';
- * import {Ray} from '@revideo/2d';
- * import {createRef} from '@revideo/core';
+ * import {makeScene2D} from '@twick/2d';
+ * import {Ray} from '@twick/2d';
+ * import {createRef} from '@twick/core';
  *
  * export default makeScene2D(function* (view) {
  *   const ray = createRef<Ray>();

@@ -1,5 +1,5 @@
-import {Circle, Line, Txt, makeScene2D} from '@revideo/2d';
-import {Vector2, createSignal, waitFor} from '@revideo/core';
+import {Circle, Line, Txt, makeScene2D} from '@twick/2d';
+import {Vector2, createSignal, waitFor} from '@twick/core';
 
 export default makeScene2D('node-signal', function* (view) {
   // highlight-start

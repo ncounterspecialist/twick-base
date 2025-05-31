@@ -1,8 +1,8 @@
 import type {ReadonlySignal, Signal} from '@preact/signals';
 import {computed, signal, useSignalEffect} from '@preact/signals';
-import type {Scene2D} from '@revideo/2d';
-import {SceneRenderEvent} from '@revideo/core';
-import {useApplication, useCurrentScene} from '@revideo/ui';
+import type {Scene2D} from '@twick/2d';
+import {SceneRenderEvent} from '@twick/core';
+import {useApplication, useCurrentScene} from '@twick/ui';
 import type {ComponentChildren} from 'preact';
 import {createContext} from 'preact';
 import {useContext, useMemo} from 'preact/hooks';
@@ -18,7 +18,7 @@ export interface PluginState {
 
 const PluginContext = createContext<PluginState | null>(null);
 
-export const NodeInspectorKey = '@revideo/2d/node-inspector';
+export const NodeInspectorKey = '@twick/2d/node-inspector';
 
 export function usePluginState() {
   return useContext(PluginContext)!;

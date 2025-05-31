@@ -1,4 +1,4 @@
-import type {Vector2} from '@revideo/core';
+import type {Vector2} from '@twick/core';
 import type {CurvePoint} from './CurvePoint';
 
 export abstract class Segment {

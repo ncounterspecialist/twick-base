@@ -1,4 +1,4 @@
-import {Vector2, createSignal, range} from '@revideo/core';
+import {Vector2, createSignal, range} from '@twick/core';
 import {describe, expect, it} from 'vitest';
 import {Circle} from '../Circle';
 import {Node} from '../Node';

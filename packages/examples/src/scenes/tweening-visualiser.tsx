@@ -7,14 +7,14 @@ import {
   Rect,
   Txt,
   makeScene2D,
-} from '@revideo/2d';
+} from '@twick/2d';
 import {
   all,
   createSignal,
   easeInOutBounce,
   linear,
   waitFor,
-} from '@revideo/core';
+} from '@twick/core';
 
 export default makeScene2D('tweening-visualizer', function* (view) {
   // Signals

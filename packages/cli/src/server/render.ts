@@ -1,4 +1,4 @@
-import {renderVideo} from '@revideo/renderer';
+import {renderVideo} from '@twick/renderer';
 import axios from 'axios';
 import type {Request, Response} from 'express';
 import path from 'path';

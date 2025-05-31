@@ -36,7 +36,7 @@ export async function download(assets: AssetInfo[][]): Promise<void> {
   });
 
   const response = await fetch(
-    '/revideo-ffmpeg-decoder/download-video-chunks',
+    '/twick-ffmpeg-decoder/download-video-chunks',
     {
       method: 'POST',
       headers: {

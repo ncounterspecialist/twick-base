@@ -1,7 +1,7 @@
-import type {Project} from '@revideo/core';
-import {Player, Stage, getFullPreviewSettings} from '@revideo/core';
+import type {Project} from '@twick/core';
+import {Player, Stage, getFullPreviewSettings} from '@twick/core';
 
-import {Vector2} from '@revideo/core';
+import {Vector2} from '@twick/core';
 
 const stylesNew = `
 .overlay {
@@ -26,7 +26,7 @@ const stylesNew = `
 `;
 
 const TEMPLATE = `<style>${stylesNew}</style><div class="overlay"></div>`;
-const ID = 'revideo-player';
+const ID = 'twick-player';
 
 enum State {
   Initial = 'initial',

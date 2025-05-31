@@ -10,7 +10,7 @@ interface ExporterPluginConfig {
 
 export function exporterPlugin({outputPath}: ExporterPluginConfig): Plugin {
   return {
-    name: 'revideo:exporter',
+    name: 'twick:exporter',
 
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
@@ -27,7 +27,7 @@ export function exporterPlugin({outputPath}: ExporterPluginConfig): Plugin {
       });
 
       server.ws.on(
-        'revideo:export',
+        'twick:export',
         async (
           {data, frame, sceneFrame, subDirectories, mimeType, groupByScene},
           client,
@@ -51,7 +51,7 @@ export function exporterPlugin({outputPath}: ExporterPluginConfig): Plugin {
           await fs.promises.writeFile(outputFilePath, base64Data, {
             encoding: 'base64',
           });
-          client.send('revideo:export-ack', {frame});
+          client.send('twick:export-ack', {frame});
         },
       );
     },

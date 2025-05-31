@@ -1,4 +1,4 @@
-import type {FfmpegExporterOptions} from '@revideo/core';
+import type {FfmpegExporterOptions} from '@twick/core';
 import type {RenderSettings} from 'render-video';
 import {v4 as uuidv4} from 'uuid';
 
@@ -23,7 +23,7 @@ export function getParamDefaultsAndCheckValidity(settings: RenderSettings): {
 
   // Image sequence exporter is not supported in renderVideo or renderPartialVideo
   if (
-    settings.projectSettings?.exporter?.name === '@revideo/core/image-sequence'
+    settings.projectSettings?.exporter?.name === '@twick/core/image-sequence'
   ) {
     throw Error(
       'You cannot use the image sequence exporter with renderVideo or renderPartialVideo. Please use the editor to export images',
@@ -47,7 +47,7 @@ export function getParamDefaultsAndCheckValidity(settings: RenderSettings): {
 
   // Wasm exporter only supports exporting to mp4
   if (
-    settings.projectSettings?.exporter?.name === '@revideo/core/wasm' &&
+    settings.projectSettings?.exporter?.name === '@twick/core/wasm' &&
     extension !== 'mp4'
   ) {
     throw Error(
@@ -56,7 +56,7 @@ export function getParamDefaultsAndCheckValidity(settings: RenderSettings): {
   }
 
   // If we are using the wasm exporter, we don't need to validate further
-  if (settings.projectSettings?.exporter?.name === '@revideo/core/wasm') {
+  if (settings.projectSettings?.exporter?.name === '@twick/core/wasm') {
     return {
       ...defaultReturn,
       outputFileName: outFileWithoutExtension,

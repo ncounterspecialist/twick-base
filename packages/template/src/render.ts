@@ -1,4 +1,4 @@
-import {renderVideo} from '@revideo/renderer';
+import {renderVideo} from '@twick/renderer';
 
 async function render() {
   console.log('Rendering video...');
@@ -10,7 +10,7 @@ async function render() {
       logProgress: true,
       renderSettings: {
         exporter: {
-          name: '@revideo/core/wasm',
+          name: '@twick/core/wasm',
           options: {
             format: 'mp4',
           },

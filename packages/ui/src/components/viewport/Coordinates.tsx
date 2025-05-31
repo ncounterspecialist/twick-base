@@ -1,4 +1,4 @@
-import {isInspectable, transformVectorAsPoint, Vector2} from '@revideo/core';
+import {isInspectable, transformVectorAsPoint, Vector2} from '@twick/core';
 import {useCallback} from 'preact/hooks';
 import {useEffect, useState} from 'react';
 import {useViewportContext} from '../../contexts';

@@ -1,6 +1,6 @@
 import styles from './Playback.module.scss';
 
-import {getFullRenderingSettings} from '@revideo/core';
+import {getFullRenderingSettings} from '@twick/core';
 import {useCallback} from 'preact/hooks';
 import {useApplication} from '../../contexts';
 import {useDocumentEvent, usePlayerState} from '../../hooks';

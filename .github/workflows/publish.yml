@@ -41,8 +41,8 @@ jobs:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
           cache: npm
-      - run: git config --global user.email "167322027+revideo-bot@users.noreply.github.com"
-      - run: git config --global user.name "revideo-bot"
+      - run: git config --global user.email "167322027+twick-bot@users.noreply.github.com"
+      - run: git config --global user.name "twick-bot"
       - run: npm ci
       - run: npx lerna run build
       - if: ${{ inputs.releaseType == 'release' }}

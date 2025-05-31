@@ -11,7 +11,7 @@ import type {
   ThreadGenerator,
   TimingFunction,
   Vector2Signal,
-} from '@revideo/core';
+} from '@twick/core';
 import {
   BBox,
   DependencyContext,
@@ -24,7 +24,7 @@ import {
   transformVector,
   transformVectorAsPoint,
   tween,
-} from '@revideo/core';
+} from '@twick/core';
 import type {Vector2LengthSignal} from '../decorators';
 import {
   addInitializer,

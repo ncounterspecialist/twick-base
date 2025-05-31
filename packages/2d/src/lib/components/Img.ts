@@ -3,7 +3,7 @@ import type {
   SerializedVector2,
   SignalValue,
   SimpleSignal,
-} from '@revideo/core';
+} from '@twick/core';
 import {
   BBox,
   Color,
@@ -11,7 +11,7 @@ import {
   DetailedError,
   Vector2,
   useLogger,
-} from '@revideo/core';
+} from '@twick/core';
 import {computed, initial, nodeName, signal} from '../decorators';
 import type {DesiredLength} from '../partials';
 import {drawImage} from '../utils';
@@ -58,10 +58,10 @@ export interface ImgProps extends RectProps {
  *
  * @preview
  * ```tsx editor
- * import {Img} from '@revideo/2d';
- * import {all, waitFor} from '@revideo/core';
- * import {createRef} from '@revideo/core';
- * import {makeScene2D} from '@revideo/2d';
+ * import {Img} from '@twick/2d';
+ * import {all, waitFor} from '@twick/core';
+ * import {createRef} from '@twick/core';
+ * import {makeScene2D} from '@twick/2d';
  *
  * export default makeScene2D(function* (view) {
  *   const ref = createRef<Img>();
@@ -92,7 +92,7 @@ export class Img extends Rect {
 
   static {
     if (import.meta.hot) {
-      import.meta.hot.on('revideo:assets', ({urls}) => {
+      import.meta.hot.on('twick:assets', ({urls}) => {
         for (const url of urls) {
           if (Img.pool[url]) {
             delete Img.pool[url];

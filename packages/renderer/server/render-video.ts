@@ -1,8 +1,8 @@
 import type {
   FfmpegExporterOptions,
   RenderVideoUserProjectSettings,
-} from '@revideo/core';
-import type {FfmpegSettings} from '@revideo/ffmpeg';
+} from '@twick/core';
+import type {FfmpegSettings} from '@twick/ffmpeg';
 import {
   audioCodecs,
   concatenateMedia,
@@ -11,9 +11,9 @@ import {
   extensions,
   getVideoDuration,
   mergeAudioWithVideo,
-} from '@revideo/ffmpeg';
-import {EventName, sendEvent} from '@revideo/telemetry';
-import motionCanvas from '@revideo/vite-plugin';
+} from '@twick/ffmpeg';
+import {EventName, sendEvent} from '@twick/telemetry';
+import motionCanvas from '@twick/vite-plugin';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
@@ -280,8 +280,8 @@ async function collectAudioAndVideoFiles(
   const audioFiles = [];
   const videoFiles = [];
   for (let i = 0; i < numOfWorkers; i++) {
-    const videoFilePath = `${os.tmpdir()}/revideo-${outputFileName}-${i}-${hiddenFolderId}/visuals.${extensions[format]}`;
-    const audioFilePath = `${os.tmpdir()}/revideo-${outputFileName}-${i}-${hiddenFolderId}/audio.wav`;
+    const videoFilePath = `${os.tmpdir()}/twick-${outputFileName}-${i}-${hiddenFolderId}/visuals.${extensions[format]}`;
+    const audioFilePath = `${os.tmpdir()}/twick-${outputFileName}-${i}-${hiddenFolderId}/audio.wav`;
 
     if (!(await doesFileExist(audioFilePath))) {
       const videoDuration = await getVideoDuration(videoFilePath);
@@ -334,7 +334,7 @@ async function cleanup(
   const cleanupFiles = [];
   for (let i = 0; i < numOfWorkers; i++) {
     cleanupFolders.push(
-      `${os.tmpdir()}/revideo-${outputFileName}-${i}-${hiddenFolderId}`,
+      `${os.tmpdir()}/twick-${outputFileName}-${i}-${hiddenFolderId}`,
     );
     cleanupFiles.push(
       path.join(
@@ -370,7 +370,7 @@ async function cleanup(
 const defaultSettings: RenderSettings = {
   projectSettings: {
     exporter: {
-      name: '@revideo/core/wasm',
+      name: '@twick/core/wasm',
     },
   },
 };
@@ -476,8 +476,8 @@ export const renderPartialVideo = async ({
     settings.progressCallback,
   );
 
-  const videoFilePath = `${os.tmpdir()}/revideo-${outputFileName}-${workerId}-${hiddenFolderId}/visuals.${extensions[format]}`;
-  const audioFilePath = `${os.tmpdir()}/revideo-${outputFileName}-${workerId}-${hiddenFolderId}/audio.wav`;
+  const videoFilePath = `${os.tmpdir()}/twick-${outputFileName}-${workerId}-${hiddenFolderId}/visuals.${extensions[format]}`;
+  const audioFilePath = `${os.tmpdir()}/twick-${outputFileName}-${workerId}-${hiddenFolderId}/audio.wav`;
 
   if (!(await doesFileExist(audioFilePath))) {
     const videoDuration = await getVideoDuration(videoFilePath);

@@ -1,5 +1,5 @@
-import {Circle, Grid, Line, Node, makeScene2D} from '@revideo/2d';
-import {Vector2, all, createRef, createSignal} from '@revideo/core';
+import {Circle, Grid, Line, Node, makeScene2D} from '@twick/2d';
+import {Vector2, all, createRef, createSignal} from '@twick/core';
 
 const RED = '#ff6470';
 const GREEN = '#99C47A';

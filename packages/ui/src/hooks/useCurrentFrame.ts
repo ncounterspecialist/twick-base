@@ -1,4 +1,4 @@
-import {RendererState} from '@revideo/core';
+import {RendererState} from '@twick/core';
 import {useApplication} from '../contexts';
 import {useRendererState} from './useRendererState';
 import {usePreviewSettings, useRenderingSettings} from './useSettings';

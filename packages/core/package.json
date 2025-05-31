@@ -1,11 +1,11 @@
 {
-  "name": "@revideo/core",
-  "version": "0.10.4",
+  "name": "@twick/core",
+  "version": "0.13.0",
   "description": "A web-based framework for creating videos programmatically",
   "main": "lib/index.js",
-  "author": "revideo",
+  "author": "twick",
   "homepage": "https://re.video/",
-  "bugs": "https://github.com/havenhq/revideo/issues",
+  "bugs": "https://github.com/ncounterspecialist/twick-base/issues",
   "license": "MIT",
   "scripts": {
     "dev": "tsc -p tsconfig.build.json -w",

@@ -43,7 +43,7 @@ export interface FfmpegExporterOptions {
  * initialized by invoking `start`.
  */
 export class FFmpegExporterClient implements Exporter {
-  public static readonly id = '@revideo/core/ffmpeg';
+  public static readonly id = '@twick/core/ffmpeg';
   public static readonly displayName = 'Video (FFmpeg)';
 
   private readonly settings: RendererSettings;
@@ -58,7 +58,7 @@ export class FFmpegExporterClient implements Exporter {
   static {
     if (import.meta.hot) {
       import.meta.hot.on(
-        `revideo:ffmpeg-exporter-ack`,
+        `twick:ffmpeg-exporter-ack`,
         (response: ServerResponse) => this.response.dispatch(response),
       );
     }
@@ -102,7 +102,7 @@ export class FFmpegExporterClient implements Exporter {
 
   public async stop(result: RendererResult): Promise<void> {
     await this.invoke('end', result);
-    await fetch('/revideo-ffmpeg-decoder/finished', {
+    await fetch('/twick-ffmpeg-decoder/finished', {
       method: 'POST',
       headers: {
         // eslint-disable-next-line
@@ -128,7 +128,7 @@ export class FFmpegExporterClient implements Exporter {
     await fetch('/audio-processing/generate-audio', {
       method: 'POST',
       body: JSON.stringify({
-        tempDir: `revideo-${this.settings.name}-${this.settings.hiddenFolderId}`,
+        tempDir: `twick-${this.settings.name}-${this.settings.hiddenFolderId}`,
         assets,
         startFrame,
         endFrame,
@@ -139,7 +139,7 @@ export class FFmpegExporterClient implements Exporter {
 
   public async mergeMedia(): Promise<void> {
     const outputFilename = this.settings.name;
-    const tempDir = `revideo-${this.settings.name}-${this.settings.hiddenFolderId}`;
+    const tempDir = `twick-${this.settings.name}-${this.settings.hiddenFolderId}`;
     const format = this.exporterOptions.format;
 
     await fetch('/audio-processing/merge-media', {
@@ -182,7 +182,7 @@ export class FFmpegExporterClient implements Exporter {
           }
         };
         FFmpegExporterClient.response.subscribe(handle);
-        import.meta.hot!.send('revideo:ffmpeg-exporter', {method, data});
+        import.meta.hot!.send('twick:ffmpeg-exporter', {method, data});
       });
     } else {
       throw new Error('FFmpegExporter can only be used locally.');

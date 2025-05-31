@@ -2,8 +2,8 @@ import type {
   InterpolationFunction,
   SignalValue,
   TimingFunction,
-} from '@revideo/core';
-import {capitalize, deepLerp, SignalContext, useLogger} from '@revideo/core';
+} from '@twick/core';
+import {capitalize, deepLerp, SignalContext, useLogger} from '@twick/core';
 import {makeSignalExtensions} from '../utils/makeSignalExtensions';
 import {addInitializer, initialize} from './initializers';
 
@@ -26,7 +26,7 @@ export interface PropertyMetadata<T> {
   compoundEntries: [string, string][];
 }
 
-const PROPERTIES = Symbol.for('@revideo/2d/decorators/properties');
+const PROPERTIES = Symbol.for('@twick/2d/decorators/properties');
 
 export function getPropertyMeta<T>(
   object: any,

@@ -1,4 +1,4 @@
-import {Vector2, clamp} from '@revideo/core';
+import {Vector2, clamp} from '@twick/core';
 import type {PathCommand} from 'parse-svg-path';
 import parse from 'parse-svg-path';
 import {ArcSegment} from './ArcSegment';

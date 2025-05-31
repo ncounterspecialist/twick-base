@@ -1,5 +1,5 @@
-import {Circle, makeScene2D} from '@revideo/2d';
-import {all, createRef} from '@revideo/core';
+import {Circle, makeScene2D} from '@twick/2d';
+import {all, createRef} from '@twick/core';
 
 export default makeScene2D('quickstart', function* (view) {
   const myCircle = createRef<Circle>();

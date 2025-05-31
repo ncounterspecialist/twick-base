@@ -3,7 +3,7 @@ import type {
   SimpleSignal,
   TimingFunction,
   Vector2,
-} from '@revideo/core';
+} from '@twick/core';
 import {
   BBox,
   createSignal,
@@ -11,7 +11,7 @@ import {
   threadable,
   transformVectorAsPoint,
   tween,
-} from '@revideo/core';
+} from '@twick/core';
 import type {CurveProfile} from '../curves';
 import {createCurveProfileLerp} from '../curves/createCurveProfileLerp';
 import {getPathProfile} from '../curves/getPathProfile';

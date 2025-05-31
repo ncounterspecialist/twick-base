@@ -1,1 +1,1 @@
-export const DEFAULT = Symbol.for('@revideo/core/signals/default');
+export const DEFAULT = Symbol.for('@twick/core/signals/default');

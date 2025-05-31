@@ -20,7 +20,7 @@ export function editorPlugin({editor, projects}: EditorPluginConfig): Plugin {
   const resolvedEditorId = '\0virtual:editor';
 
   return {
-    name: 'revideo:editor',
+    name: 'twick:editor',
 
     async load(id) {
       const [, query] = id.split('?');
@@ -31,7 +31,7 @@ export function editorPlugin({editor, projects}: EditorPluginConfig): Plugin {
           return `\
 import {editor} from '${editor}';
 import project from '${projects.list[0].url}';
-import {addEditorToProject} from '@revideo/core';
+import {addEditorToProject} from '@twick/core';
 editor(await addEditorToProject(project));
 `;
         }
@@ -44,7 +44,7 @@ editor(await addEditorToProject(project));
             return `\
 import {editor} from '${editor}';
 import project from '${projects.lookup.get(name)!.url}';
-import {addEditorToProject} from '@revideo/core';
+import {addEditorToProject} from '@twick/core';
 editor(await addEditorToProject(project));
 `;
           }

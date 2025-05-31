@@ -1,4 +1,4 @@
-import {createRef, createSignal, range} from '@revideo/core';
+import {createRef, createSignal, range} from '@twick/core';
 import {describe, expect, it} from 'vitest';
 import {useScene2D} from '../../scenes';
 import {Node} from '../Node';

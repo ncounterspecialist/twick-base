@@ -1,5 +1,5 @@
-import type {Vector2} from '@revideo/core';
-import {clamp} from '@revideo/core';
+import type {Vector2} from '@twick/core';
+import {clamp} from '@twick/core';
 import {CircleSegment} from './CircleSegment';
 import type {CurveProfile} from './CurveProfile';
 import {LineSegment} from './LineSegment';

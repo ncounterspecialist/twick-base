@@ -3,14 +3,14 @@ import type {
   SignalValue,
   ThreadGenerator,
   TimingFunction,
-} from '@revideo/core';
+} from '@twick/core';
 import {
   createSignal,
   deepLerp,
   DependencyContext,
   SignalContext,
   unwrap,
-} from '@revideo/core';
+} from '@twick/core';
 import {addInitializer, getPropertyMetaOrCreate} from '../decorators';
 import {defaultDiffer} from './CodeDiffer';
 import {insert, replace} from './CodeFragment';

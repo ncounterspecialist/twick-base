@@ -21,7 +21,7 @@
     "resolutionScale": 2,
     "colorSpace": "srgb",
     "exporter": {
-      "name": "@revideo/core/image-sequence",
+      "name": "@twick/core/image-sequence",
       "options": {
         "fileType": "image/png",
         "quality": 100,

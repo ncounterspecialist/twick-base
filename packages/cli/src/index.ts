@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import {EventName, sendEvent} from '@revideo/telemetry';
+import {EventName, sendEvent} from '@twick/telemetry';
 import {Command} from 'commander';
 import {launchEditor} from './editor';
 import {createServer} from './server/index';
@@ -10,8 +10,8 @@ const program = new Command();
 const VERSION = '0.10.4';
 
 program
-  .name('revideo')
-  .description('CLI to interact with the revideo service')
+  .name('twick')
+  .description('CLI to interact with the twick service')
   .version(VERSION);
 
 program
@@ -40,7 +40,7 @@ program
 
 program
   .command('editor')
-  .description('Start the revideo editor')
+  .description('Start the twick editor')
   .option(
     '--projectFile <path>',
     'Path to the project file',

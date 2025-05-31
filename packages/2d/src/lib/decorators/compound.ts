@@ -5,7 +5,7 @@ import {
   map,
   modify,
   useLogger,
-} from '@revideo/core';
+} from '@twick/core';
 import {makeSignalExtensions} from '../utils/makeSignalExtensions';
 import {addInitializer} from './initializers';
 import {getPropertyMetaOrCreate} from './signal';

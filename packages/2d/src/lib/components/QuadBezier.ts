@@ -1,4 +1,4 @@
-import type {PossibleVector2, SignalValue, Vector2Signal} from '@revideo/core';
+import type {PossibleVector2, SignalValue, Vector2Signal} from '@twick/core';
 import {QuadBezierSegment} from '../curves';
 import type {PolynomialSegment} from '../curves/PolynomialSegment';
 import {computed, vector2Signal} from '../decorators';
@@ -26,8 +26,8 @@ export interface QuadBezierProps extends CurveProps {
  *
  * @preview
  * ```tsx editor
- * import {makeScene2D, QuadBezier} from '@revideo/2d';
- * import {createRef} from '@revideo/core';
+ * import {makeScene2D, QuadBezier} from '@twick/2d';
+ * import {createRef} from '@twick/core';
  *
  * export default makeScene2D(function* (view) {
  *   const bezier = createRef<QuadBezier>();

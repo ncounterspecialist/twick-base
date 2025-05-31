@@ -4,7 +4,7 @@ import type {
   SimpleSignal,
   ThreadGenerator,
   TimingFunction,
-} from '@revideo/core';
+} from '@twick/core';
 import {
   BBox,
   createSignal,
@@ -14,7 +14,7 @@ import {
   unwrap,
   useLogger,
   Vector2,
-} from '@revideo/core';
+} from '@twick/core';
 import type {CurveProfile} from '../curves';
 import {getPolylineProfile} from '../curves';
 import {
@@ -82,7 +82,7 @@ export interface LineProps extends CurveProps {
  * @preview
  * ```tsx editor
  * // snippet Simple line
- * import {makeScene2D, Line} from '@revideo/2d';
+ * import {makeScene2D, Line} from '@twick/2d';
  *
  * export default makeScene2D(function* (view) {
  *   view.add(
@@ -101,7 +101,7 @@ export interface LineProps extends CurveProps {
  * });
  *
  * // snippet Polygon
- * import {makeScene2D, Line} from '@revideo/2d';
+ * import {makeScene2D, Line} from '@twick/2d';
  *
  * export default makeScene2D(function* (view) {
  *   view.add(
@@ -119,8 +119,8 @@ export interface LineProps extends CurveProps {
  * });
  *
  * // snippet Using signals
- * import {makeScene2D, Line} from '@revideo/2d';
- * import {createSignal} from '@revideo/core';
+ * import {makeScene2D, Line} from '@twick/2d';
+ * import {createSignal} from '@twick/core';
  *
  * export default makeScene2D(function* (view) {
  *   const tip = createSignal(-150);
@@ -142,8 +142,8 @@ export interface LineProps extends CurveProps {
  * });
  *
  * // snippet Tweening points
- * import {makeScene2D, Line} from '@revideo/2d';
- * import {createRef} from '@revideo/core';
+ * import {makeScene2D, Line} from '@twick/2d';
+ * import {createRef} from '@twick/core';
  *
  * export default makeScene2D(function* (view) {
  *   const line = createRef<Line>();

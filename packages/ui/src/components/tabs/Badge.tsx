@@ -1,4 +1,4 @@
-import {LogLevel} from '@revideo/core';
+import {LogLevel} from '@twick/core';
 import clsx from 'clsx';
 import type {ComponentChildren, Ref} from 'preact';
 import styles from './Tabs.module.scss';

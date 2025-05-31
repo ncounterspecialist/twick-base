@@ -1,6 +1,6 @@
 /// <reference types="vitest" />
 
-import motionCanvas from '@revideo/vite-plugin';
+import motionCanvas from '@twick/vite-plugin';
 import {defineConfig} from 'vite';
 
 export default defineConfig({

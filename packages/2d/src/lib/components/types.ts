@@ -1,4 +1,4 @@
-import type {ReferenceReceiver} from '@revideo/core';
+import type {ReferenceReceiver} from '@twick/core';
 import type {Node} from './Node';
 
 export type ComponentChild =

@@ -1,4 +1,4 @@
-import {getFullPreviewSettings, getFullRenderingSettings} from '@revideo/core';
+import {getFullPreviewSettings, getFullRenderingSettings} from '@twick/core';
 import {useApplication} from '../contexts';
 
 export function useSharedSettings() {
