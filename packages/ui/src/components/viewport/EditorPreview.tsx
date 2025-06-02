@@ -191,6 +191,10 @@ export function EditorPreview() {
           }}
           onWheel={event => {
             if (isDragging) return;
+            
+            // Prevent default scrolling to enable zoom functionality
+            event.preventDefault();
+            
             const rect = containerRef.current.getBoundingClientRect();
             const pointer = {
               x: event.x - rect.x - rect.width / 2,

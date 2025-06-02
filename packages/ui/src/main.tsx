@@ -17,6 +17,7 @@ import {ShortcutsProvider} from './contexts/shortcuts';
 import GridPlugin from './plugin/GridPlugin';
 import {projectNameSignal} from './signals';
 import {getItem, setItem} from './utils';
+import {initializeWheelEventFix} from './utils/wheelEventFix';
 
 const ExperimentalHooks = [
   'tabs',
@@ -32,6 +33,9 @@ function renderRoot(vnode: ComponentChild) {
 }
 
 export function editor(project: Project) {
+  // Initialize wheel event fix to prevent passive event listener warnings
+  initializeWheelEventFix();
+  
   Error.stackTraceLimit = Infinity;
   projectNameSignal.value = project.name;
 

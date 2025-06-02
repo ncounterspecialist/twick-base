@@ -6,4 +6,5 @@ export * from './LoggerManager';
 export * from './mouse';
 export * from './openOutputPath';
 export * from './sourceMaps';
+export * from './wheelEventFix';
 export * from './withLoader';

@@ -4,11 +4,11 @@ export function useDocumentEvent<T extends keyof DocumentEventMap>(
   type: T,
   listener: (this: Document, ev: DocumentEventMap[T]) => void,
   enabled = true,
-  capture = false,
+  options: boolean | AddEventListenerOptions = false,
 ) {
   useEffect(() => {
     if (!enabled) return;
-    document.addEventListener(type, listener, capture);
-    return () => document.removeEventListener(type, listener, capture);
-  }, [type, listener, enabled, capture]);
+    document.addEventListener(type, listener, options);
+    return () => document.removeEventListener(type, listener, options);
+  }, [type, listener, enabled, options]);
 }

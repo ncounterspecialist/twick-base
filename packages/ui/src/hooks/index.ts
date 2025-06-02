@@ -15,3 +15,4 @@ export * from './useStateChange';
 export * from './useStorage';
 export * from './useSubscribable';
 export * from './useViewportMatrix';
+export * from './useWheelEvent';

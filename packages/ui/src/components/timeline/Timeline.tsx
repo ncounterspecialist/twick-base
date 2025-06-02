@@ -187,6 +187,8 @@ export function Timeline() {
           onWheel={event => {
             const isVertical = Math.abs(event.deltaX) > Math.abs(event.deltaY);
             if (event.shiftKey || isVertical) return;
+            
+            // Prevent default scrolling behavior for zoom functionality
             event.preventDefault();
 
             let ratio = 1 - Math.sign(event.deltaY) * ZOOM_SPEED;
