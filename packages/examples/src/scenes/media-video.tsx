@@ -1,34 +1,18 @@
-import {Video, Audio, makeScene2D} from '@twick/2d';
-import {createRef, waitFor, all} from '@twick/core';
+import {Video, makeScene2D} from '@twick/2d';
+import {createRef, waitFor} from '@twick/core';
 
-import exampleMp4 from '@twick/examples/assets/example.mp4';
-import exampleMp3 from '@twick/examples/assets/123.mp3';
+import exampleMp4 from '@revideo/examples/assets/example.mp4';
 
 export default makeScene2D('media-video', function* (view) {
   const videoRef = createRef<Video>();
-  const audioRef = createRef<Audio>();
 
-  // Use yield to properly add components to the scene
-  yield view.add(
-    <Video
-      ref={videoRef}
-      src={exampleMp4}
-      width={720}
-      height={1080}
-    />
-  );
+  view.add(<Video ref={videoRef} src="https://static-assets.kifferai.com/instagram_videos/1746601560981.mp4" volume={0.5}/>);
 
-  yield view.add(
-    <Audio
-      ref={audioRef}
-      src={exampleMp3}
-    />
-  );
+  // Wait for video metadata to be loaded
+  yield* videoRef().waitForMetadata();
 
-  // No manual play() calls - let Media components handle playback automatically
-
-  // Create animations to drive the rendering loop
-  yield* all(
-    waitFor(15) // Wait for 15 seconds to see the video
-  );
+  
+  videoRef().play();
+  yield* videoRef().scale(1.25, 2).to(1, 2);
+  yield* waitFor(10);
 });

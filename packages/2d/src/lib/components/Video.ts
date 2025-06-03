@@ -8,7 +8,8 @@ import {ImageCommunication} from '../utils/video/ffmpeg-client';
 import {dropExtractor, getFrame} from '../utils/video/mp4-parser-manager';
 import type {MediaProps} from './Media';
 import {Media} from './Media';
-
+import {waitUntil} from '../utils/waitUntil';
+ 
 export interface VideoProps extends MediaProps {
   /**
    * {@inheritDoc Video.alpha}
@@ -107,77 +108,74 @@ export class Video extends Media {
   @computed()
   private video(): HTMLVideoElement {
     const src = this.src();
-    
-    // Use a temporary key for undefined src to avoid conflicts
-    const key = `${this.key}/${src || 'pending'}`;
-    
+    const key = `${this.key}/${src}`;
     let video = Video.pool[key];
     if (!video) {
       video = document.createElement('video');
       video.crossOrigin = 'anonymous';
+      video.preload = 'metadata';
+      video.playsInline = true;
+      video.setAttribute('webkit-playsinline', 'true');
+      video.setAttribute('playsinline', 'true');
 
-      // Only set src if it's valid, otherwise leave it empty
-      if (src && src !== 'undefined') {
-        try {
-          const parsedSrc = new URL(src, window.location.origin);
-          
-          if (parsedSrc.pathname.endsWith('.m3u8')) {
-            const hls = new Hls();
-            hls.loadSource(src);
-            hls.attachMedia(video);
-          } else {
-            video.src = src;
-          }
-        } catch (error) {
-          // Fallback to direct assignment
-          video.src = src;
-        }
-      }
+      // Set initial volume
+      video.volume = this.getVolume();
 
-      Video.pool[key] = video;
-    } else if (src && src !== 'undefined' && video.src !== src) {
-      // Update existing video element if src has changed and is now valid
-      try {
-        const parsedSrc = new URL(src, window.location.origin);
-        
-        if (parsedSrc.pathname.endsWith('.m3u8')) {
-          const hls = new Hls();
-          hls.loadSource(src);
-          hls.attachMedia(video);
-        } else {
-          video.src = src;
-        }
-      } catch (error) {
-        // Fallback to direct assignment
+      const parsedSrc = new URL(src, window.location.origin);
+      if (parsedSrc.pathname.endsWith('.m3u8')) {
+        const hls = new Hls();
+        hls.loadSource(src);
+        hls.attachMedia(video);
+      } else {
         video.src = src;
       }
-      
-      // Move video to correct pool key
-      delete Video.pool[key];
-      const newKey = `${this.key}/${src}`;
-      Video.pool[newKey] = video;
+
+      // Add metadata event listeners
+      video.addEventListener('loadedmetadata', () => {
+        if (video.duration === Infinity || video.duration === 0) {
+          // For iOS, we need to seek to the end to get the duration
+          video.currentTime = 24 * 60 * 60; // 24 hours
+        }
+      });
+
+      video.addEventListener('seeked', () => {
+        if (video.duration === Infinity || video.duration === 0) {
+          // If we still don't have duration, try a different approach
+          video.currentTime = 0;
+        }
+      });
+
+      // Add durationchange event listener
+      video.addEventListener('durationchange', () => {
+        if (video.duration === Infinity || video.duration === 0) {
+          // Try to force duration calculation
+          video.currentTime = 0.1;
+        }
+      });
+
+      // Add loadeddata event listener
+      video.addEventListener('loadeddata', () => {
+        if (video.duration === Infinity || video.duration === 0) {
+          // Try to force duration calculation
+          video.currentTime = 0.1;
+        }
+      });
+
+      // Add canplay event listener
+      video.addEventListener('canplay', () => {
+        if (video.duration === Infinity || video.duration === 0) {
+          // Try to force duration calculation
+          video.currentTime = 0.1;
+        }
+      });
+
+      Video.pool[key] = video;
     }
 
-    // If src is still undefined, wait for it to become available
-    if (!src || src === 'undefined') {
-      DependencyContext.collectPromise(
-        new Promise<void>(resolve => {
-          // Check periodically for valid src
-          const checkSrc = () => {
-            const currentSrc = this.src();
-            if (currentSrc && currentSrc !== 'undefined') {
-              resolve();
-            } else {
-              setTimeout(checkSrc, 10);
-            }
-          };
-          checkSrc();
-        }),
-      );
-    }
+    // Update volume whenever video is accessed
+    video.volume = this.getVolume();
 
     const weNeedToWait = this.waitForCanPlayNecessary(video);
-    
     if (!weNeedToWait) {
       return video;
     }
@@ -224,7 +222,6 @@ export class Video extends Media {
 
     const playing =
       this.playing() && time < video.duration && video.playbackRate > 0;
-    
     if (playing) {
       if (video.paused) {
         DependencyContext.collectPromise(video.play());
@@ -336,9 +333,6 @@ export class Video extends Media {
   }
 
   protected override async draw(context: CanvasRenderingContext2D) {
-    // Auto-start playback if Twick is playing but media isn't
-    this.autoPlayBasedOnTwick();
-    
     this.drawShape(context);
     const alpha = this.alpha();
     if (alpha > 0) {
@@ -364,23 +358,15 @@ export class Video extends Media {
 
   protected override applyFlex() {
     super.applyFlex();
-    try {
-      const video = this.video();
-      // Only set aspect ratio if video element is available and has valid dimensions
-      if (video && video.videoWidth > 0 && video.videoHeight > 0) {
-        this.element.style.aspectRatio = (
-          this.ratio() ?? video.videoWidth / video.videoHeight
-        ).toString();
-      }
-    } catch (error) {
-      // If video element is not ready yet, skip setting aspect ratio
-      // It will be set later when the video becomes available
-    }
+    const video = this.video();
+    this.element.style.aspectRatio = (
+      this.ratio() ?? video.videoWidth / video.videoHeight
+    ).toString();
   }
 
   public override remove() {
     super.remove();
-    dropExtractor(this.key, this.src());
+    dropExtractor(this.key, this.video().src);
     return this;
   }
 
@@ -457,5 +443,20 @@ export class Video extends Media {
         this.handleUnknownFileType(src);
       })(),
     );
+  }
+
+  public *waitForMetadata() {
+    const video = this.video();
+    
+    // If duration is already available and valid, return immediately
+    if (video.duration > 0 && video.duration !== Infinity) {
+      return;
+    }
+
+    // Try to force duration calculation
+    video.currentTime = 0.1;
+    
+    // Wait for metadata to be loaded with a valid duration
+    yield* waitUntil(() => video.duration > 0 && video.duration !== Infinity);
   }
 }
