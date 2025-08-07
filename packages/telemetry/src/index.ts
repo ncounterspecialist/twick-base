@@ -3,7 +3,7 @@ import os from 'os';
 import path from 'path';
 import {PostHog} from 'posthog-node';
 
-const Client = new PostHog('test-key', {
+const Client = new PostHog('phc_XaPky8YDbZjqm4GkCWBsVmICZTOTgjascrsftSOoJUJ', {
   host: 'https://eu.posthog.com',
 });
 
