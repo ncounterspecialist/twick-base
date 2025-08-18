@@ -25,13 +25,10 @@ jobs:
     env:
       NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
       NPM_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
-      GH_TOKEN: ${{secrets.PUBLISH_TOKEN}}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{secrets.PUBLISH_TOKEN}}
-          submodules: true
       - name: Initialize and update submodules
         run: |
           git submodule init
