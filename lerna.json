@@ -3,10 +3,7 @@
   "useNx": true,
   "private": false,
   "version": "0.14.1",
-  "ignoreChanges": [
-    "**/*.test.ts",
-    "**/*.md"
-  ],
+  "ignoreChanges": ["**/*.test.ts", "**/*.md"],
   "message": "ci(release): %v [skip ci]",
   "conventionalCommits": true,
   "command": {
