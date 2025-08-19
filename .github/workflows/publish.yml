@@ -26,6 +26,7 @@ jobs:
       NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       NPM_TOKEN: ${{secrets.NPM_TOKEN}}
       GH_TOKEN: ${{secrets.GH_TOKEN}}
+      NPM_CONFIG_USERCONFIG: /home/runner/work/_temp/.npmrc
     
     steps:
       - name: Checkout code
@@ -41,6 +42,13 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: npm
 
+      - name: Setup NPM authentication
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
+          echo "always-auth=true" >> ~/.npmrc
+          echo "@twick:registry=https://registry.npmjs.org/" >> ~/.npmrc
+
       - name: Configure git
         run: |
           git config --global user.email "167322027+twick-bot@users.noreply.github.com"
@@ -54,8 +62,8 @@ jobs:
 
       - name: Publish release
         if: ${{ inputs.releaseType == 'release' }}
-        run: npx lerna publish --yes --force-publish --exact ${{ inputs.version }}
+        run: npx lerna publish --yes --force-publish --exact ${{ inputs.version }} --access public
 
       - name: Publish canary
         if: ${{ inputs.releaseType == 'canary' }}
-        run: npx lerna publish --yes --canary --force-publish
+        run: npx lerna publish --yes --canary --force-publish --access public
