@@ -48,6 +48,7 @@ jobs:
           echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
           echo "always-auth=true" >> ~/.npmrc
           echo "@twick:registry=https://registry.npmjs.org/" >> ~/.npmrc
+          echo "access=public" >> ~/.npmrc
 
       - name: Configure git
         run: |
@@ -62,8 +63,8 @@ jobs:
 
       - name: Publish release
         if: ${{ inputs.releaseType == 'release' }}
-        run: npx lerna publish --yes --force-publish --exact ${{ inputs.version }} --access public
+        run: npx lerna publish --yes --force-publish --exact ${{ inputs.version }}
 
       - name: Publish canary
         if: ${{ inputs.releaseType == 'canary' }}
-        run: npx lerna publish --yes --canary --force-publish --access public
+        run: npx lerna publish --yes --canary --force-publish
