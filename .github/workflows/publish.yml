@@ -25,12 +25,14 @@ jobs:
     env:
       NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+      GH_TOKEN: ${{secrets.GH_TOKEN}}
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{secrets.GH_TOKEN}}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
