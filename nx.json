@@ -3,9 +3,25 @@
     "default": {
       "runner": "nx/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build"]
+        "cacheableOperations": [
+          "build"
+        ]
       }
     }
   },
-  "targetDefaults": {}
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ]
+    }
+  },
+  "continuousDependencies": {},
+  "plugins": [],
+  "defaultBase": "main",
+  "workspaceLayout": {
+    "appsDir": "packages",
+    "libsDir": "packages"
+  },
+  "$schema": "./node_modules/nx/schemas/nx-schema.json"
 }
