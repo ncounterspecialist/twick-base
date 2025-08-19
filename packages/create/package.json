@@ -20,15 +20,15 @@
     "url": "https://github.com/ncounterspecialist/twick-base.git"
   },
   "devDependencies": {
-    "@twick/2d": "^0.14.1",
-    "@twick/core": "^0.14.1",
-    "@twick/ffmpeg": "^0.14.1",
-    "@twick/renderer": "^0.14.1",
-    "@twick/ui": "^0.14.1",
-    "@twick/vite-plugin": "^0.14.1"
+    "@twick/2d": "0.14.1",
+    "@twick/core": "0.14.1",
+    "@twick/ffmpeg": "0.14.1",
+    "@twick/renderer": "0.14.1",
+    "@twick/ui": "0.14.1",
+    "@twick/vite-plugin": "0.14.1"
   },
   "dependencies": {
-    "@twick/telemetry": "^0.14.1",
+    "@twick/telemetry": "0.14.1",
     "minimist": "^1.2.8",
     "prompts": "^2.4.2"
   }
