@@ -4,7 +4,6 @@
   "description": "Quickly scaffold twick projects",
   "main": "index.js",
   "author": "twick",
-  "homepage": "https://re.video/",
   "bugs": "https://github.com/ncounterspecialist/twick-base/issues",
   "license": "MIT",
   "type": "module",
