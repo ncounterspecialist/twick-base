@@ -3,7 +3,6 @@
   "version": "0.14.1",
   "description": "A 2D renderer for twick",
   "author": "twick",
-  "homepage": "https://re.video/",
   "bugs": "https://github.com/ncounterspecialist/twick-base/issues",
   "license": "MIT",
   "main": "lib/index.js",
