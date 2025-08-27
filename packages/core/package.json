@@ -4,7 +4,6 @@
   "description": "A web-based framework for creating videos programmatically",
   "main": "lib/index.js",
   "author": "twick",
-  "homepage": "https://re.video/",
   "bugs": "https://github.com/ncounterspecialist/twick-base/issues",
   "license": "MIT",
   "scripts": {
