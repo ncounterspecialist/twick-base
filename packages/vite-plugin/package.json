@@ -1,6 +1,6 @@
 {
   "name": "@twick/vite-plugin",
-  "version": "1.14.3",
+  "version": "0.14.3",
   "description": "A Vite plugin for twick projects",
   "main": "lib/index.js",
   "author": "twick",
@@ -18,13 +18,13 @@
     "lib"
   ],
   "devDependencies": {
-    "@twick/telemetry": "1.14.3",
+    "@twick/telemetry": "0.14.3",
     "@types/follow-redirects": "^1.14.1",
     "@types/formidable": "^3.4.5",
     "@types/mime-types": "^2.1.1"
   },
   "dependencies": {
-    "@twick/ffmpeg": "1.14.3",
+    "@twick/ffmpeg": "0.14.3",
     "fast-glob": "^3.3.1",
     "follow-redirects": "^1.15.2",
     "formidable": "^3.5.1",

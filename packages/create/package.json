@@ -1,6 +1,6 @@
 {
   "name": "@twick/create",
-  "version": "1.14.3",
+  "version": "0.14.3",
   "description": "Quickly scaffold twick projects",
   "main": "index.js",
   "author": "twick",
@@ -19,15 +19,15 @@
     "url": "https://github.com/ncounterspecialist/twick-base.git"
   },
   "devDependencies": {
-    "@twick/2d": "1.14.3",
-    "@twick/core": "1.14.3",
-    "@twick/ffmpeg": "1.14.3",
-    "@twick/renderer": "1.14.3",
-    "@twick/ui": "1.14.3",
-    "@twick/vite-plugin": "1.14.3"
+    "@twick/2d": "0.14.3",
+    "@twick/core": "0.14.3",
+    "@twick/ffmpeg": "0.14.3",
+    "@twick/renderer": "0.14.3",
+    "@twick/ui": "0.14.3",
+    "@twick/vite-plugin": "0.14.3"
   },
   "dependencies": {
-    "@twick/telemetry": "1.14.3",
+    "@twick/telemetry": "0.14.3",
     "minimist": "^1.2.8",
     "prompts": "^2.4.2"
   }

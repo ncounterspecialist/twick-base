@@ -1,6 +1,6 @@
 {
   "name": "@twick/renderer",
-  "version": "1.14.3",
+  "version": "0.14.3",
   "description": "A headless renderer for twick",
   "main": "lib/server/index.js",
   "author": "twick",
@@ -20,12 +20,12 @@
     "types"
   ],
   "dependencies": {
-    "@twick/ffmpeg": "1.14.3",
+    "@twick/ffmpeg": "0.14.3",
     "puppeteer": "^23.4.0",
     "vite": "4.5.2"
   },
   "devDependencies": {
-    "@twick/core": "1.14.3",
+    "@twick/core": "0.14.3",
     "ncp": "^2.0.0"
   }
 }

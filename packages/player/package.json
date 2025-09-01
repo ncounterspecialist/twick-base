@@ -1,6 +1,6 @@
 {
   "name": "@twick/player",
-  "version": "1.14.3",
+  "version": "0.14.3",
   "description": "A custom element for displaying animations made with twick",
   "main": "dist/main.js",
   "types": "types/main.d.ts",
@@ -22,7 +22,7 @@
     "types"
   ],
   "devDependencies": {
-    "@twick/core": "1.14.3",
+    "@twick/core": "0.14.3",
     "sass": "^1.58.0",
     "terser": "^5.16.1"
   }

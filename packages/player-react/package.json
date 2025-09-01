@@ -1,6 +1,6 @@
 {
   "name": "@twick/player-react",
-  "version": "1.14.3",
+  "version": "0.14.3",
   "description": "",
   "main": "dist/index.js",
   "files": [
@@ -22,7 +22,7 @@
     "tailwindcss": "^3.4.12"
   },
   "dependencies": {
-    "@twick/core": "1.14.3",
+    "@twick/core": "0.14.3",
     "react": "^18",
     "react-dom": "^18",
     "uuid": "^10.0.0"
