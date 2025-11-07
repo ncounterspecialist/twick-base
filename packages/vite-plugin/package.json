@@ -1,6 +1,6 @@
 {
   "name": "@twick/vite-plugin",
-  "version": "0.14.7",
+  "version": "0.14.8",
   "description": "A Vite plugin for twick projects",
   "main": "lib/index.js",
   "author": "twick",

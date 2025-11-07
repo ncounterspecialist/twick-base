@@ -1,6 +1,6 @@
 {
   "name": "@twick/renderer",
-  "version": "0.14.7",
+  "version": "0.14.8",
   "description": "A headless renderer for twick",
   "main": "lib/server/index.js",
   "author": "twick",
