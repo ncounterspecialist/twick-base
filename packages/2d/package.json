@@ -1,6 +1,6 @@
 {
   "name": "@twick/2d",
-  "version": "0.14.9",
+  "version": "0.14.10",
   "description": "A 2D renderer for twick",
   "author": "twick",
   "bugs": "https://github.com/ncounterspecialist/twick-base/issues",
