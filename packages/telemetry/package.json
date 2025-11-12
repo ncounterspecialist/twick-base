@@ -1,6 +1,6 @@
 {
   "name": "@twick/telemetry",
-  "version": "0.14.10",
+  "version": "0.14.11",
   "description": "Telemetry for Twick. Check the documentation to learn how to disable it.",
   "main": "dist/index.js",
   "author": "twick",
