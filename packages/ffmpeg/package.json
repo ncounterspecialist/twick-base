@@ -1,6 +1,6 @@
 {
   "name": "@twick/ffmpeg",
-  "version": "0.14.11",
+  "version": "0.14.12",
   "description": "Ffmpeg utilities for twick",
   "main": "dist/index.js",
   "author": "twick",
@@ -16,8 +16,8 @@
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@ffprobe-installer/ffprobe": "^2.0.0",
-    "@twick/core": "0.14.11",
-    "@twick/telemetry": "0.14.11",
+    "@twick/core": "0.14.12",
+    "@twick/telemetry": "0.14.12",
     "fluent-ffmpeg": "^2.1.2",
     "uuid": "^10.0.0"
   },
