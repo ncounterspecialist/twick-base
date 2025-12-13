@@ -30,5 +30,6 @@
     "formidable": "^3.5.1",
     "mime-types": "^2.1.35",
     "source-map": "^0.6.1"
-  }
+  },
+  "gitHead": "d871e4bfaa8d9085679ad1d15e48a07a290e35c6"
 }

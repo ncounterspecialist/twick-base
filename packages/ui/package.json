@@ -37,5 +37,6 @@
     "sass": "^1.69.5",
     "source-map-js": "^1.0.2",
     "vite-plugin-dts": "^4.2.1"
-  }
+  },
+  "gitHead": "d871e4bfaa8d9085679ad1d15e48a07a290e35c6"
 }
