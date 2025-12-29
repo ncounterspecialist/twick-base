@@ -1,6 +1,6 @@
 {
   "name": "@twick/core",
-  "version": "0.14.16",
+  "version": "0.14.17",
   "description": "A web-based framework for creating videos programmatically",
   "main": "lib/index.js",
   "author": "twick",
