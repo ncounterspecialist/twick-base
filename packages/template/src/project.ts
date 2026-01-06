@@ -1,4 +1,4 @@
-import {Color, makeProject, Vector2} from '@twick/core';
+import {makeProject, Vector2} from '@twick/core';
 
 import example from './example';
 
@@ -12,7 +12,7 @@ export const project = makeProject({
   },
   settings: {
     shared: {
-      background: new Color('#FFFFFF'),
+      background: '#FFFFFF',
       range: [0, Infinity],
       size: new Vector2(1920, 1080),
     },

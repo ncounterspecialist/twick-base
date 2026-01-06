@@ -8,10 +8,17 @@
     "packages/*"
   ],
   "scripts": {
+    "build": "npx lerna run build",
     "core:dev": "npm run dev -w packages/core",
     "core:build": "npm run build -w packages/core",
     "core:bundle": "npm run bundle -w packages/core",
     "core:test": "npm run test -w packages/core",
+    "telemetry:build": "npm run build -w packages/telemetry",
+    "telemetry:bundle": "npm run bundle -w packages/telemetry",
+    "telemetry:test": "npm run test -w packages/telemetry",
+    "ffmpeg:build": "npm run build -w packages/ffmpeg",
+    "ffmpeg:bundle": "npm run bundle -w packages/ffmpeg",
+    "ffmpeg:test": "npm run test -w packages/ffmpeg",
     "2d:dev": "npm run dev -w packages/2d",
     "2d:build": "npm run build -w packages/2d",
     "2d:bundle": "npm run bundle -w packages/2d",
