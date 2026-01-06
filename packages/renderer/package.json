@@ -27,5 +27,6 @@
   "devDependencies": {
     "@twick/core": "0.14.19",
     "ncp": "^2.0.0"
-  }
+  },
+  "gitHead": "5894dfaf8c554811df704b7698958071f73180de"
 }

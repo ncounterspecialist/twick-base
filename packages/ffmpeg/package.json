@@ -25,5 +25,6 @@
     "@types/ffprobe-static": "^2.0.3",
     "@types/fluent-ffmpeg": "^2.1.21",
     "@types/uuid": "^10.0.0"
-  }
+  },
+  "gitHead": "5894dfaf8c554811df704b7698958071f73180de"
 }

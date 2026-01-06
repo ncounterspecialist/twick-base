@@ -47,5 +47,6 @@
     "mathjax-full": "^3.2.2",
     "mp4box": "^0.5.2",
     "parse-svg-path": "^0.1.2"
-  }
+  },
+  "gitHead": "5894dfaf8c554811df704b7698958071f73180de"
 }

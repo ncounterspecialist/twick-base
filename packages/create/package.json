@@ -30,5 +30,6 @@
     "@twick/telemetry": "0.14.19",
     "minimist": "^1.2.8",
     "prompts": "^2.4.2"
-  }
+  },
+  "gitHead": "5894dfaf8c554811df704b7698958071f73180de"
 }
