@@ -4,13 +4,10 @@
   "description": "A web-based framework for creating videos programmatically",
   "author": "twick",
   "license": "MIT",
-
   "type": "module",
-
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -18,37 +15,30 @@
       "require": "./dist/index.cjs"
     }
   },
-
   "sideEffects": false,
-
   "files": [
     "dist",
     "shaders",
     "tsconfig.project.json"
   ],
-
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
     "test": "vitest"
   },
-
   "dependencies": {
     "culori": "^4.0.1",
     "mp4-wasm": "^1.0.6"
   },
-
   "devDependencies": {
     "@types/culori": "^2.1.1",
     "jsdom": "^22.1.0",
     "tsup": "^8.0.0",
     "typescript": "^5.5.0"
   },
-
   "repository": {
     "type": "git",
     "url": "https://github.com/ncounterspecialist/twick-base.git"
   },
-
   "bugs": "https://github.com/ncounterspecialist/twick-base/issues"
 }

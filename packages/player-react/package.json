@@ -4,13 +4,10 @@
   "description": "",
   "author": "twick",
   "license": "MIT",
-
   "type": "module",
-
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -18,27 +15,21 @@
       "require": "./dist/index.cjs"
     }
   },
-
   "sideEffects": false,
-
   "files": [
     "dist"
   ],
-
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup && postcss src/**/*.css --dir dist"
   },
-
   "keywords": [],
-
   "dependencies": {
-    "@twick/core": "^0.15.0",
+    "@twick/core": "0.15.0",
     "react": "^18",
     "react-dom": "^18",
     "uuid": "^10.0.0"
   },
-
   "devDependencies": {
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -50,11 +41,9 @@
     "tsup": "^8.0.0",
     "typescript": "^5.5.0"
   },
-
   "repository": {
     "type": "git",
     "url": "https://github.com/ncounterspecialist/twick-base.git"
   },
-
   "bugs": "https://github.com/ncounterspecialist/twick-base/issues"
 }

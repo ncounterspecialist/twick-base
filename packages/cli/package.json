@@ -24,9 +24,9 @@
     "typescript": "^5.4.3"
   },
   "dependencies": {
-    "@twick/renderer": "^0.15.0",
-    "@twick/telemetry": "^0.15.0",
-    "@twick/vite-plugin": "^0.15.0",
+    "@twick/renderer": "0.15.0",
+    "@twick/telemetry": "0.15.0",
+    "@twick/vite-plugin": "0.15.0",
     "chokidar": "^3.5.3",
     "commander": "^12.0.0",
     "cors": "^2.8.5",

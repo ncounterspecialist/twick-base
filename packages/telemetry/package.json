@@ -4,13 +4,10 @@
   "description": "Telemetry for Twick. Check the documentation to learn how to disable it.",
   "author": "twick",
   "license": "MIT",
-
   "type": "module",
-
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -18,35 +15,28 @@
       "require": "./dist/index.cjs"
     }
   },
-
   "sideEffects": false,
-
   "files": [
     "dist",
     "src"
   ],
-
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
     "postinstall": "node src/postinstall.js"
   },
-
   "dependencies": {
     "posthog-node": "^4.0.0",
     "uuid": "^9.0.1"
   },
-
   "devDependencies": {
     "tsup": "^8.0.0",
     "typescript": "^5.5.0"
   },
-
   "repository": {
     "type": "git",
     "url": "https://github.com/ncounterspecialist/twick-base.git"
   },
-
   "homepage": "https://twick.base/",
   "bugs": "https://github.com/ncounterspecialist/twick-base/issues"
 }

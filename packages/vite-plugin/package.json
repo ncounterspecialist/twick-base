@@ -4,13 +4,10 @@
   "description": "A Vite plugin for twick projects",
   "author": "twick",
   "license": "MIT",
-
   "type": "module",
-
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -18,28 +15,23 @@
       "require": "./dist/index.cjs"
     }
   },
-
   "sideEffects": false,
-
   "files": [
     "dist"
   ],
-
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup"
   },
-
   "dependencies": {
-    "@twick/ffmpeg": "^0.15.0",
-    "@twick/telemetry": "^0.15.0",
+    "@twick/ffmpeg": "0.15.0",
+    "@twick/telemetry": "0.15.0",
     "fast-glob": "^3.3.1",
     "follow-redirects": "^1.15.2",
     "formidable": "^3.5.1",
     "mime-types": "^2.1.35",
     "source-map": "^0.6.1"
   },
-
   "devDependencies": {
     "@types/follow-redirects": "^1.14.1",
     "@types/formidable": "^3.4.5",
@@ -47,11 +39,9 @@
     "tsup": "^8.0.0",
     "typescript": "^5.5.0"
   },
-
   "repository": {
     "type": "git",
     "url": "https://github.com/ncounterspecialist/twick-base.git"
   },
-
   "bugs": "https://github.com/ncounterspecialist/twick-base/issues"
 }
