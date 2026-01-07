@@ -1,5 +1,10 @@
 {
   "extends": "./tsconfig.json",
-  "references": [{"path": "../lib/tsconfig.build.json"}],
-  "include": ["**/*"]
+  "references": [{"path": "../lib/tsconfig.json"}],
+  "include": ["**/*"],
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "isolatedModules": false
+  }
 }

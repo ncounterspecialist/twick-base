@@ -1,5 +1,7 @@
 import {EventName, sendEvent} from '@twick/telemetry';
-import * as ffmpeg from 'fluent-ffmpeg';
+// eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+const ffmpeg = require('fluent-ffmpeg');
+import type * as FfmpegTypes from 'fluent-ffmpeg';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
@@ -39,7 +41,7 @@ export class VideoFrameExtractor {
   private height: number = 0;
   private frameSize: number = 0;
   private codec: string | null = null;
-  private process: ffmpeg.FfmpegCommand | null = null;
+  private process: FfmpegTypes.FfmpegCommand | null = null;
   private terminated: boolean = false;
 
   public static downloadedVideoMap: Map<
@@ -102,7 +104,7 @@ export class VideoFrameExtractor {
     }
 
     return new Promise((resolve, reject) => {
-      ffmpeg.ffprobe(url, (err, metadata) => {
+      ffmpeg.ffprobe(url, (err: Error | null, metadata: any) => {
         if (err) {
           reject(err);
           return;
@@ -130,7 +132,7 @@ export class VideoFrameExtractor {
             });
             resolve(outputPath);
           })
-          .on('error', err => reject(err))
+          .on('error', (err: Error) => reject(err))
           .run();
       });
     });
@@ -203,7 +205,7 @@ export class VideoFrameExtractor {
     filePath: string,
     fps: number,
     codec: string,
-  ): ffmpeg.FfmpegCommand {
+  ): FfmpegTypes.FfmpegCommand {
     const {inputOptions, outputOptions} = this.getArgs(
       codec,
       [startTime, toTime],
@@ -217,13 +219,13 @@ export class VideoFrameExtractor {
       .on('end', () => {
         this.handleClose(0);
       })
-      .on('error', err => {
+      .on('error', (err: Error) => {
         this.handleError(err);
       })
-      .on('stderr', stderrLine => {
+      .on('stderr', (stderrLine: string) => {
         console.log(stderrLine);
       })
-      .on('stdout', stderrLine => {
+      .on('stdout', (stderrLine: string) => {
         console.log(stderrLine);
       });
 
@@ -247,7 +249,7 @@ export class VideoFrameExtractor {
   private createFfmpegProcessToExtractFirstFrame(
     filePath: string,
     codec: string,
-  ): ffmpeg.FfmpegCommand {
+  ): FfmpegTypes.FfmpegCommand {
     const {inputOptions, outputOptions} = this.getArgs(
       codec,
       undefined,
@@ -261,13 +263,13 @@ export class VideoFrameExtractor {
       .on('end', () => {
         this.handleClose(0);
       })
-      .on('error', err => {
+      .on('error', (err: Error) => {
         this.handleError(err);
       })
-      .on('stderr', stderrLine => {
+      .on('stderr', (stderrLine: string) => {
         console.log(stderrLine);
       })
-      .on('stdout', stderrLine => {
+      .on('stdout', (stderrLine: string) => {
         console.log(stderrLine);
       });
 
@@ -287,7 +289,7 @@ export class VideoFrameExtractor {
       const chunkSize = Math.min(remainingSpace, data.length - dataOffset);
 
       data.copy(
-        this.buffer,
+        this.buffer as any,
         this.bufferOffset,
         dataOffset,
         dataOffset + chunkSize,
@@ -297,7 +299,7 @@ export class VideoFrameExtractor {
 
       // We have a complete frame
       if (this.bufferOffset === this.frameSize) {
-        this.imageBuffers.push(Buffer.from(this.buffer)); // Create a copy
+        this.imageBuffers.push(Buffer.from(this.buffer as Uint8Array)); // Create a copy
         this.bufferOffset = 0; // Reset buffer for next frame
       }
     }

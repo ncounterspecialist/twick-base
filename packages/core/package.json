@@ -1,35 +1,54 @@
 {
   "name": "@twick/core",
-  "version": "0.14.22",
+  "version": "0.15.0",
   "description": "A web-based framework for creating videos programmatically",
-  "main": "lib/index.js",
   "author": "twick",
-  "bugs": "https://github.com/ncounterspecialist/twick-base/issues",
   "license": "MIT",
+
+  "type": "module",
+
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+
+  "sideEffects": false,
+
+  "files": [
+    "dist",
+    "shaders",
+    "tsconfig.project.json"
+  ],
+
   "scripts": {
-    "dev": "tsc -p tsconfig.build.json -w",
-    "build": "tsc -p tsconfig.build.json",
-    "bundle": "rollup -c rollup.config.mjs",
+    "dev": "tsup --watch",
+    "build": "tsup",
     "test": "vitest"
   },
-  "sideEffects": false,
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ncounterspecialist/twick-base.git"
-  },
-  "files": [
-    "lib",
-    "tsconfig.project.json",
-    "project.d.ts",
-    "shaders"
-  ],
+
   "dependencies": {
     "culori": "^4.0.1",
     "mp4-wasm": "^1.0.6"
   },
+
   "devDependencies": {
     "@types/culori": "^2.1.1",
-    "jsdom": "^22.1.0"
+    "jsdom": "^22.1.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0"
   },
-  "gitHead": "5894dfaf8c554811df704b7698958071f73180de"
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ncounterspecialist/twick-base.git"
+  },
+
+  "bugs": "https://github.com/ncounterspecialist/twick-base/issues"
 }

@@ -6,10 +6,10 @@
  * Telemetry can be disabled by running Twick with the environment variable DISABLE_TELEMETRY=true
  */
 
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
-const {v4: uuidv4} = require('uuid');
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
+import {v4 as uuidv4} from 'uuid';
 
 const idPath = path.resolve(os.homedir(), '.twick/id.txt');
 const outputDirectory = path.dirname(idPath);

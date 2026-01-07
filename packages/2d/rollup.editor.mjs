@@ -12,17 +12,21 @@ export default [
     },
     external: [/^@twick/, /^@?preact/, './index.css'],
     plugins: [
-      resolve(),
-      postcss({
-        modules: true,
-        extract: true,
-      }),
       typescript({
-        tsconfig: './src/editor/tsconfig.build.json',
+        tsconfig: './src/editor/tsconfig.json',
         compilerOptions: {
           outDir: './editor',
           composite: false,
+          jsx: 'react-jsx',
         },
+        include: ['src/editor/**/*.ts', 'src/editor/**/*.tsx'],
+      }),
+      resolve({
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
+      }),
+      postcss({
+        modules: true,
+        extract: true,
       }),
     ],
   },

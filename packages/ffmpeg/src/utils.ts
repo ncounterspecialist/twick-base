@@ -1,9 +1,12 @@
-import * as ffmpeg from 'fluent-ffmpeg';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import {v4 as uuidv4} from 'uuid';
 import {ffmpegSettings} from './settings';
+
+// Import fluent-ffmpeg - handle both ESM and CJS
+// eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+const fluentFfmpeg = require('fluent-ffmpeg');
 
 export type AudioCodec = 'aac' | 'libopus';
 
@@ -43,8 +46,8 @@ export async function concatenateMedia(
   await fs.promises.writeFile(tempFile, fileContent);
 
   return new Promise((resolve, reject) => {
-    ffmpeg.setFfmpegPath(ffmpegSettings.getFfmpegPath());
-    const ffmpegCommand = ffmpeg();
+    fluentFfmpeg.setFfmpegPath(ffmpegSettings.getFfmpegPath());
+    const ffmpegCommand = fluentFfmpeg();
 
     ffmpegCommand
       .input(tempFile)
@@ -54,7 +57,7 @@ export async function concatenateMedia(
         '-protocol_whitelist file,http,https,tcp,tls',
       ])
       .outputOptions(['-c copy'])
-      .on('error', err => {
+      .on('error', (err: Error) => {
         console.error('Error:', err);
         fs.promises.unlink(tempFile).catch(console.error);
         reject(err); // Reject the promise on error
@@ -71,17 +74,17 @@ export async function createSilentAudioFile(
   filePath: string,
   duration: number,
 ) {
-  ffmpeg.setFfmpegPath(ffmpegSettings.getFfmpegPath());
+  fluentFfmpeg.setFfmpegPath(ffmpegSettings.getFfmpegPath());
 
   return new Promise((resolve, reject) => {
-    ffmpeg()
+    fluentFfmpeg()
       .addInput(`anullsrc=channel_layout=stereo:sample_rate=${48000}`)
       .inputFormat('lavfi')
       .duration(duration)
       .on('end', () => {
         resolve(filePath);
       })
-      .on('error', err => {
+      .on('error', (err: Error) => {
         console.error('Error creating silent audio file:', err);
         reject(err);
       })
@@ -90,10 +93,10 @@ export async function createSilentAudioFile(
 }
 
 export async function getVideoDuration(filePath: string): Promise<number> {
-  ffmpeg.setFfprobePath(ffmpegSettings.getFfprobePath());
+    fluentFfmpeg.setFfprobePath(ffmpegSettings.getFfprobePath());
 
   return new Promise((resolve, reject) => {
-    ffmpeg.ffprobe(filePath, (err, metadata) => {
+    fluentFfmpeg.ffprobe(filePath, (err: Error | null, metadata: any) => {
       if (err) {
         reject(err);
         return;
@@ -112,7 +115,7 @@ export async function getVideoDimensions(
   filePath: string,
 ): Promise<{width: number; height: number}> {
   return new Promise((resolve, reject) => {
-    ffmpeg.ffprobe(filePath, (err, metadata) => {
+    fluentFfmpeg.ffprobe(filePath, (err: Error | null, metadata: any) => {
       if (err) {
         console.error('Error getting video dimensions:', err);
         reject(new Error('Failed to get video dimensions'));
@@ -120,7 +123,7 @@ export async function getVideoDimensions(
       }
 
       const videoStream = metadata.streams.find(
-        stream => stream.codec_type === 'video',
+        (stream: any) => stream.codec_type === 'video',
       );
       if (videoStream && videoStream.width && videoStream.height) {
         resolve({
@@ -148,10 +151,10 @@ export async function mergeAudioWithVideo(
   outputPath: string,
   audioCodec: AudioCodec = 'aac',
 ): Promise<void> {
-  ffmpeg.setFfmpegPath(ffmpegSettings.getFfmpegPath());
+  fluentFfmpeg.setFfmpegPath(ffmpegSettings.getFfmpegPath());
 
   return new Promise((resolve, reject) => {
-    ffmpeg()
+    fluentFfmpeg()
       .input(videoPath)
       .input(audioPath)
       .outputOptions([
@@ -165,7 +168,7 @@ export async function mergeAudioWithVideo(
       .on('end', () => {
         resolve();
       })
-      .on('error', err => {
+      .on('error', (err: Error) => {
         console.error(`Error merging video and audio: ${err.message}`);
         reject(err);
       })
@@ -174,10 +177,10 @@ export async function mergeAudioWithVideo(
 }
 
 export async function checkForAudioStream(file: string): Promise<boolean> {
-  ffmpeg.setFfprobePath(ffmpegSettings.getFfprobePath());
+    fluentFfmpeg.setFfprobePath(ffmpegSettings.getFfprobePath());
 
   return new Promise((resolve, reject) => {
-    ffmpeg.ffprobe(file, (err, metadata) => {
+    fluentFfmpeg.ffprobe(file, (err: Error | null, metadata: any) => {
       if (err) {
         console.error(`error checking for audioStream for file ${file}`, err);
         reject(err);
@@ -185,7 +188,7 @@ export async function checkForAudioStream(file: string): Promise<boolean> {
       }
 
       const audioStreams = metadata.streams.filter(
-        s => s.codec_type === 'audio',
+        (s: any) => s.codec_type === 'audio',
       );
       resolve(audioStreams.length > 0);
     });
@@ -193,15 +196,15 @@ export async function checkForAudioStream(file: string): Promise<boolean> {
 }
 
 export async function getSampleRate(filePath: string): Promise<number> {
-  ffmpeg.setFfprobePath(ffmpegSettings.getFfprobePath());
+    fluentFfmpeg.setFfprobePath(ffmpegSettings.getFfprobePath());
 
   return new Promise((resolve, reject) => {
-    ffmpeg.ffprobe(filePath, (err, metadata) => {
+    fluentFfmpeg.ffprobe(filePath, (err: Error | null, metadata: any) => {
       if (err) {
         reject(err);
         return;
       }
-      const audioStream = metadata.streams.find(s => s.codec_type === 'audio');
+      const audioStream = metadata.streams.find((s: any) => s.codec_type === 'audio');
       if (audioStream && audioStream.sample_rate) {
         resolve(audioStream.sample_rate);
       } else {
@@ -212,15 +215,15 @@ export async function getSampleRate(filePath: string): Promise<number> {
 }
 
 export async function getVideoCodec(filePath: string) {
-  ffmpeg.setFfprobePath(ffmpegSettings.getFfprobePath());
+    fluentFfmpeg.setFfprobePath(ffmpegSettings.getFfprobePath());
 
   return new Promise<string>((resolve, reject) => {
-    ffmpeg.ffprobe(filePath, (err, metadata) => {
+    fluentFfmpeg.ffprobe(filePath, (err: Error | null, metadata: any) => {
       if (err) {
         reject(err);
         return;
       }
-      const videoStream = metadata.streams.find(s => s.codec_type === 'video');
+      const videoStream = metadata.streams.find((s: any) => s.codec_type === 'video');
       if (videoStream && videoStream.codec_name) {
         resolve(videoStream.codec_name);
       } else {
@@ -233,15 +236,15 @@ export async function getVideoCodec(filePath: string) {
 export async function getVideoMetadata(
   filePath: string,
 ): Promise<{codec: string; width: number; height: number}> {
-  ffmpeg.setFfprobePath(ffmpegSettings.getFfprobePath());
+    fluentFfmpeg.setFfprobePath(ffmpegSettings.getFfprobePath());
 
   return new Promise((resolve, reject) => {
-    ffmpeg.ffprobe(filePath, (err, metadata) => {
+    fluentFfmpeg.ffprobe(filePath, (err: Error | null, metadata: any) => {
       if (err) {
         reject(err);
         return;
       }
-      const videoStream = metadata.streams.find(s => s.codec_type === 'video');
+      const videoStream = metadata.streams.find((s: any) => s.codec_type === 'video');
       if (
         videoStream &&
         videoStream.codec_name &&

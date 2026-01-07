@@ -1,17 +1,44 @@
 {
   "name": "@twick/player-react",
-  "version": "0.14.22",
+  "version": "0.15.0",
   "description": "",
-  "main": "dist/index.js",
+  "author": "twick",
+  "license": "MIT",
+
+  "type": "module",
+
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+
+  "sideEffects": false,
+
   "files": [
     "dist"
   ],
+
   "scripts": {
-    "build": "tsc && postcss src/**/*.css --dir dist"
+    "dev": "tsup --watch",
+    "build": "tsup && postcss src/**/*.css --dir dist"
   },
+
   "keywords": [],
-  "author": "twick",
-  "license": "MIT",
+
+  "dependencies": {
+    "@twick/core": "^0.15.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "uuid": "^10.0.0"
+  },
+
   "devDependencies": {
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -19,13 +46,15 @@
     "cssnano": "^7.0.6",
     "postcss": "^8.4.47",
     "postcss-cli": "^11.0.0",
-    "tailwindcss": "^3.4.12"
+    "tailwindcss": "^3.4.12",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0"
   },
-  "dependencies": {
-    "@twick/core": "0.14.22",
-    "react": "^18",
-    "react-dom": "^18",
-    "uuid": "^10.0.0"
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ncounterspecialist/twick-base.git"
   },
-  "gitHead": "5894dfaf8c554811df704b7698958071f73180de"
+
+  "bugs": "https://github.com/ncounterspecialist/twick-base/issues"
 }

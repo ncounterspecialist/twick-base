@@ -4,7 +4,7 @@ import type {
   RendererSettings,
 } from '@twick/core';
 import {EventName, sendEvent} from '@twick/telemetry';
-import * as ffmpeg from 'fluent-ffmpeg';
+import ffmpeg from 'fluent-ffmpeg';
 import * as os from 'os';
 import * as path from 'path';
 import {ImageStream} from './image-stream';

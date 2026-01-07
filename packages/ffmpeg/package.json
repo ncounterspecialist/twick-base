@@ -1,30 +1,57 @@
 {
   "name": "@twick/ffmpeg",
-  "version": "0.14.22",
+  "version": "0.15.0",
   "description": "Ffmpeg utilities for twick",
-  "main": "dist/index.js",
   "author": "twick",
-  "bugs": "https://github.com/ncounterspecialist/twick-base/issues",
   "license": "MIT",
-  "scripts": {
-    "build": "tsc"
+
+  "type": "module",
+
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
   },
+
+  "sideEffects": false,
+
   "files": [
-    "dist",
-    "types"
+    "dist"
   ],
+
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "test": "vitest"
+  },
+
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@ffprobe-installer/ffprobe": "^2.0.0",
-    "@twick/core": "0.14.22",
-    "@twick/telemetry": "0.14.22",
+    "@twick/core": "^0.15.0",
+    "@twick/telemetry": "^0.15.0",
     "fluent-ffmpeg": "^2.1.2",
     "uuid": "^10.0.0"
   },
+
   "devDependencies": {
     "@types/ffprobe-static": "^2.0.3",
     "@types/fluent-ffmpeg": "^2.1.21",
-    "@types/uuid": "^10.0.0"
+    "@types/uuid": "^10.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0"
   },
-  "gitHead": "5894dfaf8c554811df704b7698958071f73180de"
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ncounterspecialist/twick-base.git"
+  },
+
+  "bugs": "https://github.com/ncounterspecialist/twick-base/issues"
 }

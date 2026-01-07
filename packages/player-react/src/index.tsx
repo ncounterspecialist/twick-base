@@ -103,38 +103,68 @@ export function Player({
 
   /**
    * Receives the current time of the video from the player.
+   * Use refs to ensure we always call the latest callbacks.
    */
-  const handleTimeUpdate = (event: Event) => {
+  const onTimeUpdateRef = useRef(onTimeUpdate);
+  const onDurationChangeRef = useRef(onDurationChange);
+  
+  // Update refs when callbacks change
+  useEffect(() => {
+    onTimeUpdateRef.current = onTimeUpdate;
+  }, [onTimeUpdate]);
+  
+  useEffect(() => {
+    onDurationChangeRef.current = onDurationChange;
+  }, [onDurationChange]);
+
+  const handleTimeUpdate = useCallback((event: Event) => {
     const e = event as CustomEvent;
     setCurrentTime(e.detail);
-    onTimeUpdate(e.detail);
-  };
+    onTimeUpdateRef.current(e.detail);
+  }, []);
 
   /**
    * Receives the duration of the video from the player.
    */
-  const handleDurationUpdate = (event: Event) => {
+  const handleDurationUpdate = useCallback((event: Event) => {
     const e = event as CustomEvent;
     setDuration(e.detail);
-    onDurationChange(e.detail);
-  };
+    onDurationChangeRef.current(e.detail);
+  }, []);
 
   /**
    * Play and pause using the space key.
    */
-  const handleKeyDown = (event: KeyboardEvent) => {
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
     if (event.code === 'Space' && focus.current) {
       event.preventDefault();
       setPlaying(prev => !prev);
     }
-  };
+  }, []);
 
-  const handlePlayerReady = (event: Event) => {
+  const onPlayerReadyRef = useRef(onPlayerReady);
+  
+  useEffect(() => {
+    onPlayerReadyRef.current = onPlayerReady;
+  }, [onPlayerReady]);
+
+  const handlePlayerReady = useCallback((event: Event) => {
     const player = (event as CustomEvent).detail;
     if (player) {
-      onPlayerReady(player);
+      onPlayerReadyRef.current(player);
     }
-  };
+    
+    // Ensure event listeners are attached when player becomes ready
+    // This is a fallback in case listeners weren't attached earlier
+    const playerElement = playerRef.current;
+    if (playerElement) {
+      // Remove and re-add to ensure they're attached
+      playerElement.removeEventListener('timeupdate', handleTimeUpdate);
+      playerElement.removeEventListener('duration', handleDurationUpdate);
+      playerElement.addEventListener('timeupdate', handleTimeUpdate);
+      playerElement.addEventListener('duration', handleDurationUpdate);
+    }
+  }, [handleTimeUpdate, handleDurationUpdate]);
 
   const handlePlayerResize = useCallback(
     (entries: ResizeObserverEntry[]) => {
@@ -173,24 +203,56 @@ export function Player({
    * Import the player and add all event listeners.
    */
   useEffect(() => {
+    let cleanup: (() => void) | null = null;
+
+    const setupListeners = () => {
+      const player = playerRef.current;
+      if (!player) return;
+
+      // Remove any existing listeners first to avoid duplicates
+      player.removeEventListener('timeupdate', handleTimeUpdate);
+      player.removeEventListener('duration', handleDurationUpdate);
+      player.removeEventListener('playerready', handlePlayerReady);
+
+      // Add event listeners
+      player.addEventListener('timeupdate', handleTimeUpdate);
+      player.addEventListener('duration', handleDurationUpdate);
+      player.addEventListener('playerready', handlePlayerReady);
+      document.addEventListener('keydown', handleKeyDown);
+
+      cleanup = () => {
+        player.removeEventListener('timeupdate', handleTimeUpdate);
+        player.removeEventListener('duration', handleDurationUpdate);
+        player.removeEventListener('playerready', handlePlayerReady);
+        document.removeEventListener('keydown', handleKeyDown);
+      };
+    };
+
+    // Import the custom element definition
     import('./internal').then(() => {
-      if (playerRef.current) {
-        (playerRef.current as any).setProject(project);
-      }
+      // Wait for the next tick to ensure the element is in the DOM
+      // Use requestAnimationFrame to ensure the custom element is ready
+      requestAnimationFrame(() => {
+        if (playerRef.current) {
+          (playerRef.current as any).setProject(project);
+          // Set up listeners after the element is ready
+          setupListeners();
+        }
+      });
     });
 
-    playerRef.current?.addEventListener('timeupdate', handleTimeUpdate);
-    playerRef.current?.addEventListener('duration', handleDurationUpdate);
-    playerRef.current?.addEventListener('playerready', handlePlayerReady);
-    document.addEventListener('keydown', handleKeyDown);
+    // Also set up listeners immediately if element already exists
+    // This handles the case where the element was already in the DOM
+    if (playerRef.current) {
+      setupListeners();
+    }
 
     return () => {
-      playerRef.current?.removeEventListener('timeupdate', handleTimeUpdate);
-      playerRef.current?.removeEventListener('duration', handleDurationUpdate);
-      playerRef.current?.removeEventListener('playerready', handlePlayerReady);
-      document.removeEventListener('keydown', handleKeyDown);
+      if (cleanup) {
+        cleanup();
+      }
     };
-  }, [project]);
+  }, [project, handleTimeUpdate, handleDurationUpdate, handlePlayerReady, handleKeyDown]);
 
   /**
    * When the forced time changes, seek to that time.

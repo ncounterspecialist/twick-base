@@ -1,5 +1,5 @@
 import type {AssetInfo, FfmpegExporterOptions} from '@twick/core';
-import * as ffmpeg from 'fluent-ffmpeg';
+import ffmpeg from 'fluent-ffmpeg';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
