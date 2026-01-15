@@ -9,6 +9,7 @@ import type {
 } from '@twick/core';
 import {
   GeneratorScene,
+  PlaybackState,
   SceneRenderEvent,
   Vector2,
   transformVectorAsPoint,
@@ -164,13 +165,37 @@ export class Scene2D extends GeneratorScene<View2D> implements Inspectable {
   }
 
   public override getMediaAssets(): Array<AssetInfo> {
-    const playingVideos = Array.from(this.registeredNodes.values())
-      .filter((node): node is Video => node instanceof Video)
-      .filter(video => (video as Video).isPlaying());
-
-    const playingAudios = Array.from(this.registeredNodes.values())
-      .filter((node): node is Audio => node instanceof Audio)
-      .filter(audio => (audio as Audio).isPlaying());
+    // During rendering, ensure all media elements are marked as playing
+    // so they can be collected for audio extraction
+    const playbackState = this.playback.state;
+    const isRendering = playbackState === PlaybackState.Rendering;
+    
+    // Get all video and audio nodes
+    const allVideos = Array.from(this.registeredNodes.values())
+      .filter((node): node is Video => node instanceof Video);
+    const allAudios = Array.from(this.registeredNodes.values())
+      .filter((node): node is Audio => node instanceof Audio);
+    
+    // During rendering, mark all media as playing if they have a valid src
+    if (isRendering) {
+      allVideos.forEach(video => {
+        const src = video.src();
+        if (src && src !== 'undefined' && !video.isPlaying()) {
+          // Set playing state directly for rendering mode
+          (video as any).playing(true);
+        }
+      });
+      allAudios.forEach(audio => {
+        const src = audio.src();
+        if (src && src !== 'undefined' && !audio.isPlaying()) {
+          // Set playing state directly for rendering mode
+          (audio as any).playing(true);
+        }
+      });
+    }
+    
+    const playingVideos = allVideos.filter(video => video.isPlaying());
+    const playingAudios = allAudios.filter(audio => audio.isPlaying());
 
     const returnObjects: AssetInfo[] = [];
 

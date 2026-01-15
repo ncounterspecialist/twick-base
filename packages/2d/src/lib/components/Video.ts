@@ -69,6 +69,11 @@ export class Video extends Media {
     'unknown';
   private fileTypeWasDetected: boolean = false;
 
+  /**
+   * Static pool of video elements cached by source URL.
+   * Multiple Video components with the same src will share the same HTMLVideoElement
+   * to avoid duplicate network requests and improve performance.
+   */
   private static readonly pool: Record<string, HTMLVideoElement> = {};
 
   private static readonly imageCommunication = !import.meta.hot
@@ -77,6 +82,80 @@ export class Video extends Media {
 
   public constructor(props: VideoProps) {
     super(props);
+  }
+
+  /**
+   * Creates a video element with CORS fallback handling.
+   * First tries with crossOrigin='anonymous', and if that fails due to CORS,
+   * falls back to creating a video without crossOrigin.
+   */
+  private createVideoElement(src: string | null | undefined, key: string): HTMLVideoElement {
+    const video = document.createElement('video');
+    video.crossOrigin = 'anonymous';
+
+    // Only set src if it's valid, otherwise leave it empty
+    if (src && src !== 'undefined') {
+      try {
+        const parsedSrc = new URL(src, window.location.origin);
+        
+        if (parsedSrc.pathname.endsWith('.m3u8')) {
+          const hls = new Hls();
+          hls.loadSource(src);
+          hls.attachMedia(video);
+        } else {
+          video.src = src;
+        }
+      } catch (error) {
+        // Fallback to direct assignment
+        video.src = src;
+      }
+
+      // Set up error handler to retry without crossOrigin if CORS fails
+      const errorHandler = () => {
+        const error = video.error;
+        // Check if error is likely CORS-related (code 4 = MEDIA_ERR_SRC_NOT_SUPPORTED)
+        // or network error (code 2 = MEDIA_ERR_NETWORK) which can also indicate CORS
+        if (error && (error.code === 4 || error.code === 2)) {
+          // Remove the error handler to avoid infinite loop
+          video.removeEventListener('error', errorHandler);
+          
+          // Try creating a new video element without crossOrigin
+          // Use src-based key for fallback too, so all instances share the same fallback video
+          const fallbackKey = `${key}_no_cors`;
+          let fallbackVideo = Video.pool[fallbackKey];
+          
+          if (!fallbackVideo) {
+            fallbackVideo = document.createElement('video');
+            // Don't set crossOrigin - this allows some servers to work without CORS headers
+            fallbackVideo.crossOrigin = null;
+            
+            try {
+              const parsedSrc = new URL(src, window.location.origin);
+              
+              if (parsedSrc.pathname.endsWith('.m3u8')) {
+                const hls = new Hls();
+                hls.loadSource(src);
+                hls.attachMedia(fallbackVideo);
+              } else {
+                fallbackVideo.src = src;
+              }
+            } catch (err) {
+              fallbackVideo.src = src;
+            }
+            
+            Video.pool[fallbackKey] = fallbackVideo;
+          }
+          
+          // Replace the current video in the pool with the fallback
+          // This ensures all Video instances with the same src use the same fallback video
+          Video.pool[key] = fallbackVideo;
+        }
+      };
+      
+      video.addEventListener('error', errorHandler, { once: true });
+    }
+
+    return video;
   }
 
   protected override desiredSize(): SerializedVector2<DesiredLength> {
@@ -104,58 +183,75 @@ export class Video extends Media {
     return this.fastSeekedVideo();
   }
 
+  /**
+   * Generates a normalized cache key based on the video source URL.
+   * This ensures that all Video elements with the same src share the same HTMLVideoElement.
+   */
+  private getCacheKey(src: string | null | undefined): string {
+    if (!src || src === 'undefined') {
+      // For undefined src, use instance-specific key to avoid conflicts
+      return `${this.key}/pending`;
+    }
+    // Normalize the URL to handle cases where the same URL might be represented differently
+    try {
+      const url = new URL(src, window.location.origin);
+      // Use the normalized URL as the key (without fragment/hash for consistency)
+      return url.href.split('#')[0];
+    } catch {
+      // If URL parsing fails, use the src as-is
+      return src;
+    }
+  }
+
   @computed()
   private video(): HTMLVideoElement {
     const src = this.src();
     
-    // Use a temporary key for undefined src to avoid conflicts
-    const key = `${this.key}/${src || 'pending'}`;
+    // Use src-based key for caching, so all Video elements with the same src share the same video element
+    const key = this.getCacheKey(src);
     
     let video = Video.pool[key];
     if (!video) {
-      video = document.createElement('video');
-      video.crossOrigin = 'anonymous';
-
-      // Only set src if it's valid, otherwise leave it empty
+      // Create a new video element and cache it by src
+      // This ensures all Video instances with the same src will reuse this element
+      video = this.createVideoElement(src, key);
+      Video.pool[key] = video;
+    } else {
+      // Video element exists in cache - verify it has the correct src
+      // Since we're using src-based keys, the video should already have the correct src
+      // But we check to handle edge cases where src might not be set yet
       if (src && src !== 'undefined') {
-        try {
-          const parsedSrc = new URL(src, window.location.origin);
-          
-          if (parsedSrc.pathname.endsWith('.m3u8')) {
-            const hls = new Hls();
-            hls.loadSource(src);
-            hls.attachMedia(video);
-          } else {
+        // Normalize both URLs for comparison
+        const normalizeUrl = (url: string): string => {
+          try {
+            const parsed = new URL(url, window.location.origin);
+            return parsed.href.split('#')[0];
+          } catch {
+            return url;
+          }
+        };
+        
+        const normalizedSrc = normalizeUrl(src);
+        const normalizedVideoSrc = video.src ? normalizeUrl(video.src) : '';
+        
+        // Only update if the srcs don't match (should be rare with src-based caching)
+        if (normalizedVideoSrc !== normalizedSrc) {
+          try {
+            const parsedSrc = new URL(src, window.location.origin);
+            
+            if (parsedSrc.pathname.endsWith('.m3u8')) {
+              const hls = new Hls();
+              hls.loadSource(src);
+              hls.attachMedia(video);
+            } else {
+              video.src = src;
+            }
+          } catch (error) {
+            // Fallback to direct assignment
             video.src = src;
           }
-        } catch (error) {
-          // Fallback to direct assignment
-          video.src = src;
         }
       }
-
-      Video.pool[key] = video;
-    } else if (src && src !== 'undefined' && video.src !== src) {
-      // Update existing video element if src has changed and is now valid
-      try {
-        const parsedSrc = new URL(src, window.location.origin);
-        
-        if (parsedSrc.pathname.endsWith('.m3u8')) {
-          const hls = new Hls();
-          hls.loadSource(src);
-          hls.attachMedia(video);
-        } else {
-          video.src = src;
-        }
-      } catch (error) {
-        // Fallback to direct assignment
-        video.src = src;
-      }
-      
-      // Move video to correct pool key
-      delete Video.pool[key];
-      const newKey = `${this.key}/${src}`;
-      Video.pool[newKey] = video;
     }
 
     // If src is still undefined, wait for it to become available

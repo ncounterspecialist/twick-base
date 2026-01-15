@@ -319,8 +319,8 @@ export abstract class Media extends Rect {
       const reason = this.getErrorReason(media.error?.code);
       const srcValue = this.src();
       
-      console.log(`ERROR: Error loading video: src="${srcValue}", ${reason}`);
-      console.log(`Media element src: "${media.src}"`);
+      console.error(`Error loading video: src="${srcValue}", ${reason}`);
+      console.error(`Media element src: "${media.src}"`);
       media.removeEventListener('error', onError);
       media.removeEventListener('canplay', onCanPlayWrapper);
       media.removeEventListener('canplaythrough', onCanPlayWrapper);
@@ -347,7 +347,6 @@ export abstract class Media extends Rect {
   }
 
   public play() {
-    console.log('=== Media.play() called ===');
     // Set the playing state first
     this.playing(true);
     
@@ -424,12 +423,17 @@ export abstract class Media extends Rect {
           const playPromise = media.play();
           if (playPromise !== undefined) {
             playPromise.then(() => {
-              console.log('Simple play started successfully');
+              // Play started successfully
             }).catch(error => {
               if (error.name !== 'AbortError') {
                 console.warn('Error in simple play:', error);
               }
-              this.playing(false);
+              // During rendering, keep playing=true even if play() fails
+              // because the renderer needs to collect media assets for audio extraction
+              const playbackState = this.view().playbackState();
+              if (playbackState !== PlaybackState.Rendering) {
+                this.playing(false);
+              }
             });
           }
         }
@@ -441,15 +445,8 @@ export abstract class Media extends Rect {
   }
   
   private actuallyPlay(media: HTMLMediaElement, timeFunction: () => number) {
-    console.log('=== actuallyPlay called ===');
-    console.log('Media element:', media);
-    console.log('Media src:', media.src);
-    console.log('Media paused:', media.paused);
-    console.log('Media readyState:', media.readyState);
-    
     // Make sure we're still supposed to be playing
     if (!this.playing()) {
-      console.log('Playing state is false, aborting actuallyPlay');
       return;
     }
     
@@ -458,24 +455,24 @@ export abstract class Media extends Rect {
     
     // Ensure the media is ready to play
     if (media.paused) {
-      console.log('Media is paused, calling play()');
       // Start playing the media element
       const playPromise = media.play();
       if (playPromise !== undefined) {
         playPromise.then(() => {
-          console.log('Media play() promise resolved - should be playing now');
-          console.log('Post-play media paused:', media.paused);
-          console.log('Post-play media currentTime:', media.currentTime);
+          // Media play() promise resolved
         }).catch(error => {
           // Don't warn about AbortError - it's normal when play() is interrupted by pause()
           if (error.name !== 'AbortError') {
             console.warn('Error playing media:', error);
           }
-          this.playing(false);
+          // During rendering, keep playing=true even if play() fails
+          // because the renderer needs to collect media assets for audio extraction
+          const playbackState = this.view().playbackState();
+          if (playbackState !== PlaybackState.Rendering) {
+            this.playing(false);
+          }
         });
       }
-    } else {
-      console.log('Media is already playing');
     }
     
     // Set up time synchronization
@@ -525,18 +522,21 @@ export abstract class Media extends Rect {
   protected autoPlayBasedOnTwick() {
     // Auto-start/stop playback based on Twick's playback state
     const playbackState = this.view().playbackState();
-    // console.log('autoPlayBasedOnTwick called:', {
-    //   playbackState,
-    //   currentlyPlaying: this.playing(),
-    //   shouldAutoPlay: (playbackState === PlaybackState.Playing || playbackState === PlaybackState.Presenting) && !this.playing(),
-    //   shouldAutoPause: playbackState === PlaybackState.Paused && this.playing()
-    // });
-    
-    if ((playbackState === PlaybackState.Playing || playbackState === PlaybackState.Presenting) && !this.playing()) {
-      console.log('Auto-starting media playback via play() method');
+    const shouldBePlaying =
+      playbackState === PlaybackState.Playing ||
+      playbackState === PlaybackState.Presenting ||
+      playbackState === PlaybackState.Rendering;
+
+    // In both preview and renderer/export mode we want media elements
+    // to be considered "playing" whenever Twick is advancing frames.
+    if (shouldBePlaying && !this.playing()) {
+      // During rendering, immediately set playing=true so getMediaAssets() can collect it
+      // The actual browser playback may fail, but that's OK - ffmpeg will extract audio server-side
+      if (playbackState === PlaybackState.Rendering) {
+        this.playing(true);
+      }
       this.play(); // Call the full play() method instead of just setting playing(true)
-    } else if (playbackState === PlaybackState.Paused && this.playing()) {
-      console.log('Auto-pausing media playback via pause() method');
+    } else if (!shouldBePlaying && this.playing()) {
       this.pause(); // Call the full pause() method
     }
   }
