@@ -3,9 +3,7 @@ import { defineConfig } from "tsup";
 export default defineConfig({
   entry: ["src/index.ts"],
   format: ["esm", "cjs"],
-  dts: {
-    resolve: true
-  },
+  dts: false, // Disable DTS generation - types come from @types/fluent-ffmpeg
   sourcemap: true,
   clean: true,
   external: [

@@ -4,7 +4,7 @@ import type {
   RendererSettings,
 } from '@twick/core';
 import {EventName, sendEvent} from '@twick/telemetry';
-import ffmpeg from 'fluent-ffmpeg';
+import * as ffmpeg from 'fluent-ffmpeg';
 import * as os from 'os';
 import * as path from 'path';
 import {ImageStream} from './image-stream';
@@ -79,7 +79,7 @@ export class FFmpegExporterServer {
 
     this.command.outputOptions(['-movflags +faststart']);
     this.promise = new Promise<void>((resolve, reject) => {
-      this.command.on('end', resolve).on('error', reject);
+      this.command.on('end', () => resolve()).on('error', (err: Error) => reject(err));
     });
   }
 
