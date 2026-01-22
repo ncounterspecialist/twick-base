@@ -1,6 +1,6 @@
 {
   "name": "@twick/core",
-  "version": "0.15.5",
+  "version": "0.15.6",
   "description": "A web-based framework for creating videos programmatically",
   "author": "twick",
   "license": "MIT",
