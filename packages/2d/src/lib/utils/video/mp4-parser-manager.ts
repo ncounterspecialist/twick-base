@@ -1,7 +1,10 @@
 import {Mp4Parser} from './parser';
+import {getFrameHTML, dropHTMLExtractor} from './html-video-extractor';
 
 // List of VideoFrameExtractors
 const videoFrameExtractors = new Map<string, Mp4Parser>();
+// Track which videos are using HTML fallback
+const htmlFallbackVideos = new Set<string>();
 
 export async function dropExtractor(id: string, filePath: string) {
   const extractorId = filePath + '-' + id;
@@ -9,6 +12,12 @@ export async function dropExtractor(id: string, filePath: string) {
   if (extractor) {
     extractor.close();
     videoFrameExtractors.delete(extractorId);
+  }
+  
+  // Also clean up HTML fallback if used
+  if (htmlFallbackVideos.has(extractorId)) {
+    dropHTMLExtractor(id, filePath);
+    htmlFallbackVideos.delete(extractorId);
   }
 }
 
@@ -20,6 +29,11 @@ export async function getFrame(
 ) {
   // Check if we already have a VideoFrameExtractor for this video
   const extractorId = filePath + '-' + id;
+  
+  if (htmlFallbackVideos.has(extractorId)) {
+    return getFrameHTML(id, filePath, time, fps);
+  }
+  
   let extractor = videoFrameExtractors.get(extractorId);
 
   const frameDuration = 1 / fps;
@@ -40,10 +54,7 @@ export async function getFrame(
   // If time has not changed, return the last frame
   if (extractor && isOldFrame) {
     const lastFrame = extractor.getLastFrame();
-    if (!lastFrame) {
-      throw new Error('No last frame');
-    }
-
+    if (!lastFrame) throw new Error('No last frame');
     return lastFrame;
   }
 
@@ -63,10 +74,29 @@ export async function getFrame(
 
   if (!extractor) {
     extractor = new Mp4Parser(filePath, fps, time);
-    await extractor.start();
+
+    try {
+      await extractor.start();
+    } catch {
+      htmlFallbackVideos.add(extractorId);
+      return getFrameHTML(id, filePath, time, fps);
+    }
+
+    const duration = extractor.getDuration();
+
+    if (duration === 0) {
+      extractor.close();
+      videoFrameExtractors.delete(extractorId);
+      htmlFallbackVideos.add(extractorId);
+      return getFrameHTML(id, filePath, time, fps);
+    }
+
+    if (duration > 0 && time > duration) {
+      throw new Error(`Requested time ${time}s exceeds video duration ${duration}s`);
+    }
+
     videoFrameExtractors.set(extractorId, extractor);
   }
 
-  // Go to the frame that is closest to the requested time
   return extractor.getNextFrame();
 }

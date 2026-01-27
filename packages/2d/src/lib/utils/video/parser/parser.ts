@@ -27,6 +27,11 @@ async function getFileInfo(uri: string) {
       controller.abort();
 
       const track = info.videoTracks[0];
+      
+      if (!track) {
+        rej('No video track found');
+        return;
+      }
 
       const config = {
         // Browser doesn't support parsing full vp8 codec (eg: `vp08.00.41.08`),
@@ -72,27 +77,40 @@ async function getFileInfo(uri: string) {
       res({file, edits, config});
     };
 
+    file.onError = (e: any) => rej(e);
+
     return fetch(uri, {signal: controller.signal}).then(async response => {
+      if (!response.ok) {
+        rej(`HTTP ${response.status}: ${response.statusText}`);
+        return;
+      }
+
       if (!response.body) {
-        throw new Error('Response body is null');
+        rej('Response body is null');
+        return;
       }
 
       const reader = response.body.getReader();
       const sink = new MP4FileSink(file, () => {});
+      
+      let bytesRead = 0;
+      let chunks = 0;
 
       while (!found) {
         await reader.read().then(({done, value}) => {
           if (done) {
             file.flush();
             controller.abort();
-            rej('Could not find moov');
+            if (!found) rej('Could not find moov box in video file');
             return;
           }
 
+          bytesRead += value.byteLength;
+          chunks++;
           sink.write(value);
         });
       }
-    });
+    }).catch((err) => rej(err));
   });
 }
 
@@ -124,21 +142,16 @@ export class Mp4Parser {
   public async getNextFrame() {
     // Start the first segment
     if (!this.sampler) {
-      // Skip segments until the start time
       let startTimeWithinSegment = this.startTime;
       while (this.nextSegment < this.edits.length) {
         const segmentDurationInSeconds = this.getSecondDurationOfSegment(
           this.edits[this.nextSegment],
         );
-        if (startTimeWithinSegment < segmentDurationInSeconds) {
-          break;
-        }
-
+        if (startTimeWithinSegment < segmentDurationInSeconds) break;
         startTimeWithinSegment -= segmentDurationInSeconds;
         this.nextSegment++;
       }
 
-      // The timestamp is outside of the video
       if (this.nextSegment >= this.edits.length) {
         throw new Error(
           `Timestamp ${this.startTime} is outside of the video, max timestamp is ${this.getDuration()}`,

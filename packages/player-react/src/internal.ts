@@ -140,7 +140,6 @@ class TwickPlayer extends HTMLElement {
     this.abortController = new AbortController();
 
     this.project = project;
-    console.log(project);
     this.defaultSettings = getFullPreviewSettings(this.project);
 
     const player = new Player(this.project);
