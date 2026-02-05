@@ -19,6 +19,7 @@ const stylesNew = `
   }
   .canvas {
 	width: 100%;
+	height: 100%;
 	display: block;
 	opacity: 1;
 	transition: opacity 0.1s;
@@ -66,9 +67,21 @@ class TwickPlayer extends HTMLElement {
     return attr ? parseFloat(attr) : (this.defaultSettings?.size.width ?? 0);
   }
 
+  private set width(value: number) {
+    if (Number.isFinite(value)) {
+      this.setAttribute('width', String(value));
+    }
+  }
+
   private get height() {
     const attr = this.getAttribute('height');
     return attr ? parseFloat(attr) : (this.defaultSettings?.size.height ?? 0);
+  }
+
+  private set height(value: number) {
+    if (Number.isFinite(value)) {
+      this.setAttribute('height', String(value));
+    }
   }
 
   private get variables() {
@@ -282,10 +295,17 @@ class TwickPlayer extends HTMLElement {
       return;
     }
 
+    // Use the requested quality (resolutionScale) instead of forcing 1,
+    // so the preview canvas can render at higher internal resolution.
+    const resolutionScale =
+      Number.isFinite(this.quality) && this.quality > 0
+        ? this.quality
+        : this.defaultSettings.resolutionScale ?? 1;
+
     const settings = {
       ...this.defaultSettings,
       size: new Vector2(this.width, this.height),
-      resolutionScale: this.quality,
+      resolutionScale,
       fps: this.fps,
     };
     this.stage.configure(settings);

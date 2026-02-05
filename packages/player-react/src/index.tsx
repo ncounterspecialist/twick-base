@@ -275,17 +275,17 @@ export function Player({
   }
 
   return (
-    <div className="twick-player-root" style={{display: 'contents'}}>
+    <div className="twick-player-root w-full h-full" style={{display: 'contents'}}>
       <div
         ref={wrapperRef}
-        className="relative cursor-default focus:outline-none"
+        className="relative cursor-default w-full h-full focus:outline-none"
         onFocus={() => (focus.current = true)}
         onBlur={() => (focus.current = false)}
         tabIndex={0}
         onMouseEnter={() => setIsMouseOver(true)}
         onMouseLeave={() => setIsMouseOver(false)}
       >
-        <div className="relative">
+        <div className="relative w-full h-full">
           <twick-player
             ref={playerRef}
             playing={String(playingState)}
