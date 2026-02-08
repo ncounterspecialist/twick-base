@@ -1,6 +1,6 @@
 {
   "name": "@twick/cli",
-  "version": "0.15.13",
+  "version": "0.15.14",
   "description": "A CLI for twick",
   "main": "dist/index.js",
   "author": "twick",
@@ -25,9 +25,9 @@
     "typescript": "^5.4.3"
   },
   "dependencies": {
-    "@twick/renderer": "0.15.13",
-    "@twick/telemetry": "0.15.13",
-    "@twick/vite-plugin": "0.15.13",
+    "@twick/renderer": "0.15.14",
+    "@twick/telemetry": "0.15.14",
+    "@twick/vite-plugin": "0.15.14",
     "axios": "^1.6.0",
     "chokidar": "^3.5.3",
     "commander": "^12.0.0",
