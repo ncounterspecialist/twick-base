@@ -303,7 +303,6 @@ export class Video extends Media {
     }
 
     this.setCurrentTime(time);
-
     return video;
   }
 
@@ -311,6 +310,13 @@ export class Video extends Media {
   protected fastSeekedVideo(): HTMLVideoElement {
     const video = this.video();
     const time = this.clampTime(this.time());
+    const playing =
+      this.playing() && time < video.duration && video.playbackRate > 0;
+    const wouldResetToZero =
+      time < 0.5 &&
+      video.currentTime > 1 &&
+      Math.abs(video.currentTime - this.lastTime) < 0.5;
+    const outOfSyncBig = Math.abs(video.currentTime - time) > 1;
 
     video.playbackRate = this.playbackRate();
 
@@ -318,9 +324,6 @@ export class Video extends Media {
       return video;
     }
 
-    const playing =
-      this.playing() && time < video.duration && video.playbackRate > 0;
-    
     if (playing) {
       if (video.paused) {
         DependencyContext.collectPromise(video.play());
@@ -331,11 +334,16 @@ export class Video extends Media {
       }
     }
 
-    // reseek when video is out of sync by more than one second
-    if (Math.abs(video.currentTime - time) > 1) {
+    // Reseek when video is out of sync; use setCurrentTime so deferred seek
+    // runs when video is not ready (readyState < 2).
+    // Do not seek backward to 0 when the time signal is stale but the element was just synced
+    // (e.g. Scene2D passed drawTime to syncToCurrentTime; next frame time() may still be 0).
+    if (wouldResetToZero) {
+      // Keep current position; time signal not yet updated for this frame.
+    } else if (outOfSyncBig) {
       this.setCurrentTime(time);
     } else if (!playing) {
-      video.currentTime = time;
+      this.setCurrentTime(time);
     }
 
     return video;

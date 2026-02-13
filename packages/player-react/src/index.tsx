@@ -7,9 +7,9 @@ import './index.css';
 import {shouldShowControls} from './utils';
 
 interface TwickPlayerProps {
-  playing?: string;
+  playing?: boolean | string;
   variables?: string;
-  looping?: string;
+  looping?: boolean | string;
   width?: number;
   height?: number;
   quality?: number;
@@ -77,6 +77,7 @@ export function Player({
   const playerRef = useRef<HTMLDivElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const lastRect = useRef<DOMRectReadOnly | null>(null);
+  const lastLoggedTimeRef = useRef<number | null>(null);
 
   const onClickHandler = controls ? () => setPlaying(prev => !prev) : undefined;
 
@@ -102,6 +103,17 @@ export function Player({
   }, [volume]);
 
   /**
+   * Set variables via setAttribute - the twick-player custom element's variables
+   * property is read-only (getter only). React would fail if we passed it as a prop.
+   */
+  const variablesJson = JSON.stringify(variables);
+  useEffect(() => {
+    if (playerRef.current) {
+      playerRef.current.setAttribute('variables', variablesJson);
+    }
+  }, [variablesJson]);
+
+  /**
    * Receives the current time of the video from the player.
    * Use refs to ensure we always call the latest callbacks.
    */
@@ -119,8 +131,13 @@ export function Player({
 
   const handleTimeUpdate = useCallback((event: Event) => {
     const e = event as CustomEvent;
-    setCurrentTime(e.detail);
-    onTimeUpdateRef.current(e.detail);
+    const t = e.detail as number;
+    const last = lastLoggedTimeRef.current;
+    if (last === null || Math.abs(t - last) > 0.05) {
+      lastLoggedTimeRef.current = t;
+    }
+    setCurrentTime(t);
+    onTimeUpdateRef.current(t);
   }, []);
 
   /**
@@ -288,15 +305,14 @@ export function Player({
         <div className="relative w-full h-full">
           <twick-player
             ref={playerRef}
-            playing={String(playingState)}
-            onClick={onClickHandler}
-            variables={JSON.stringify(variables)}
-            looping={looping ? 'true' : 'false'}
-            width={width}
-            height={height}
             quality={quality}
             fps={fps}
+            width={width}
+            height={height}
             volume={volumeState}
+            playing={playingState}
+            looping={looping}
+            onClick={onClickHandler}
           />
           <div
             className={`absolute bottom-0 w-full transition-opacity duration-200 ${

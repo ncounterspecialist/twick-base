@@ -50,35 +50,47 @@ class TwickPlayer extends HTMLElement {
     ];
   }
 
-  private get fps() {
+  public get fps() {
     const attr = this.getAttribute('fps');
     return attr ? parseFloat(attr) : (this.defaultSettings?.fps ?? 60);
   }
 
-  private get quality() {
+  public set fps(value: number) {
+    if (value != null && Number.isFinite(value)) {
+      this.setAttribute('fps', String(value));
+    }
+  }
+
+  public get quality() {
     const attr = this.getAttribute('quality');
     return attr
       ? parseFloat(attr)
       : (this.defaultSettings?.resolutionScale ?? 1);
   }
 
-  private get width() {
+  public set quality(value: number) {
+    if (value != null && Number.isFinite(value)) {
+      this.setAttribute('quality', String(value));
+    }
+  }
+
+  public get width() {
     const attr = this.getAttribute('width');
     return attr ? parseFloat(attr) : (this.defaultSettings?.size.width ?? 0);
   }
 
-  private set width(value: number) {
+  public set width(value: number) {
     if (Number.isFinite(value)) {
       this.setAttribute('width', String(value));
     }
   }
 
-  private get height() {
+  public get height() {
     const attr = this.getAttribute('height');
     return attr ? parseFloat(attr) : (this.defaultSettings?.size.height ?? 0);
   }
 
-  private set height(value: number) {
+  public set height(value: number) {
     if (Number.isFinite(value)) {
       this.setAttribute('height', String(value));
     }
@@ -94,6 +106,30 @@ class TwickPlayer extends HTMLElement {
     }
   }
 
+  public get volume() {
+    return this._volume;
+  }
+
+  public set volume(value: number) {
+    if (value != null) {
+      this.setAttribute('volume', String(value));
+    }
+  }
+
+  public set playing(value: boolean | string) {
+    this.setAttribute(
+      'playing',
+      value === true || value === 'true' ? 'true' : 'false',
+    );
+  }
+
+  public set looping(value: boolean | string) {
+    this.setAttribute(
+      'looping',
+      value === true || value === 'true' ? 'true' : 'false',
+    );
+  }
+
   private readonly root: ShadowRoot;
   private readonly canvas: HTMLCanvasElement;
   private readonly overlay: HTMLCanvasElement;
@@ -105,13 +141,13 @@ class TwickPlayer extends HTMLElement {
     | ReturnType<typeof getFullPreviewSettings>
     | undefined;
   private abortController: AbortController | null = null;
-  private playing = false;
+  private _playing = false;
   private stage = new Stage();
 
   private time: number = 0;
   private duration: number = 0; // in frames
-  private looping = true;
-  private volume = 1;
+  private _looping = true;
+  private _volume = 1;
   private volumeChangeRequested = true;
 
   public constructor() {
@@ -132,21 +168,21 @@ class TwickPlayer extends HTMLElement {
 
   private setState(state: State) {
     this.state = state;
-    this.setPlaying(this.playing);
+    this.setPlaying(this._playing);
   }
 
   private setPlaying(value: boolean) {
     if (this.state === State.Ready && value) {
       this.player?.togglePlayback(true);
-      this.playing = true;
+      this._playing = true;
     } else {
       this.player?.togglePlayback(false);
-      this.playing = false;
+      this._playing = false;
     }
   }
 
   private async updateProject(project: Project) {
-    const playing = this.playing;
+    const playing = this._playing;
     this.setState(State.Initial);
 
     this.abortController?.abort();
@@ -157,7 +193,7 @@ class TwickPlayer extends HTMLElement {
 
     const player = new Player(this.project);
     player.setVariables(this.variables);
-    player.toggleLoop(this.looping);
+    player.toggleLoop(this._looping);
 
     this.player?.onRender.unsubscribe(this.render);
     this.player?.onFrameChanged.unsubscribe(this.handleFrameChanged);
@@ -187,7 +223,7 @@ class TwickPlayer extends HTMLElement {
         this.player?.playback.reload();
         break;
       case 'looping':
-        this.looping = newValue === 'true';
+        this._looping = newValue === 'true';
         this.player?.toggleLoop(newValue === 'true');
         break;
       case 'fps':
@@ -197,7 +233,7 @@ class TwickPlayer extends HTMLElement {
         this.updateSettings();
         break;
       case 'volume':
-        this.volume = newValue;
+        this._volume = newValue;
         this.volumeChangeRequested = true;
     }
   }
@@ -233,8 +269,10 @@ class TwickPlayer extends HTMLElement {
     }
 
     const e = event as CustomEvent;
-    this.time = e.detail;
-    this.player?.requestSeek(e.detail * this.player.playback.fps);
+    const timeSec = e.detail as number;
+    const frame = timeSec * this.player!.playback.fps;
+    this.time = timeSec;
+    this.player?.requestSeek(frame);
     this.volumeChangeRequested = true;
   };
 
@@ -244,9 +282,9 @@ class TwickPlayer extends HTMLElement {
     }
 
     const e = event as CustomEvent;
-    this.volume = e.detail;
+    this._volume = e.detail;
 
-    this.player?.playback.currentScene.adjustVolume(this.volume);
+    this.player?.playback.currentScene.adjustVolume(this._volume);
   };
 
   /**
@@ -259,7 +297,7 @@ class TwickPlayer extends HTMLElement {
     this.time = frame / this.player.playback.fps;
 
     if (this.volumeChangeRequested || frame === 0) {
-      this.player?.playback.currentScene.adjustVolume(this.volume);
+      this.player?.playback.currentScene.adjustVolume(this._volume);
       this.volumeChangeRequested = false;
     }
   };

@@ -94,9 +94,10 @@ export abstract class Media extends Rect {
 
   public constructor(props: MediaProps) {
     super(props);
-    
+    // Defer scheduleSeek so we don't read this.time() (and risk async property access)
+    // before the node has been yielded in the scene generator (avoids "node was not ready" warning).
     if (!this.awaitCanPlay()) {
-      this.scheduleSeek(this.time());
+      setTimeout(() => this.scheduleSeek(this.time()), 0);
     }
 
     if (props.play) {
@@ -161,18 +162,46 @@ export abstract class Media extends Rect {
 
   protected abstract fastSeekedMedia(): HTMLMediaElement;
 
+  /**
+   * Sync the underlying media element to the given time (e.g. draw/playback time).
+   * When `time` is passed (e.g. from Scene2D.draw), that value is used so sync
+   * does not depend on the node's time signal (which may only update on projectData change).
+   * When omitted, falls back to this.time().
+   * Uses skipCollectPromise so we don't leave a promise in DependencyContext.
+   */
+  public syncToCurrentTime(time?: number): void {
+    const syncTime = time ?? this.time();
+    this.setCurrentTime(syncTime, {skipCollectPromise: true});
+  }
+
   protected abstract override draw(
     context: CanvasRenderingContext2D,
   ): Promise<void>;
 
-  protected setCurrentTime(value: number) {
+  protected setCurrentTime(
+    value: number,
+    options?: {skipCollectPromise?: boolean},
+  ) {
     try {
       const media = this.mediaElement();
-      if (media.readyState < 2) return;
+      const key = this.key ?? 'media';
+      if (media.readyState < 2) {
+        // Video not ready yet (HAVE_CURRENT_DATA = 2). Record desired time and seek
+        // when ready so the video doesn't stay at 0 or last paused position.
+        this.lastTime = value;
+        this.time(value);
+        this.waitForCanPlay(media, () => {
+          media.currentTime = value;
+          this.lastTime = value;
+          this.time(value);
+        });
+        return;
+      }
 
       media.currentTime = value;
       this.lastTime = value;
-      if (media.seeking) {
+      this.time(value);
+      if (media.seeking && !options?.skipCollectPromise) {
         DependencyContext.collectPromise(
           new Promise<void>(resolve => {
             const listener = () => {
@@ -184,8 +213,9 @@ export abstract class Media extends Rect {
         );
       }
     } catch (error) {
-      // If media element is not ready yet, just update the lastTime
+      // If media element is not ready yet, just update the lastTime and time signal
       this.lastTime = value;
+      this.time(value);
     }
   }
 

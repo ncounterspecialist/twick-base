@@ -401,12 +401,14 @@ export class Player {
       : PlaybackState.Playing;
 
     // Seek to the given frame
+    let didSeekWhilePaused = false;
     if (state.seek >= 0 || !this.isInUserRange(this.status.frame)) {
       const seekFrame = state.seek < 0 ? this.status.frame : state.seek;
       const clampedFrame = this.clampRange(seekFrame);
       this.logger.profile('seek time');
       await this.playback.seek(clampedFrame);
       this.logger.profile('seek time');
+      didSeekWhilePaused = state.paused;
     }
     // Do nothing if paused
     else if (state.paused) {
@@ -436,6 +438,12 @@ export class Player {
     // Draw the project
     await this.render.dispatch();
     this.frame.current = this.playback.frame;
+
+    // When we seeked while paused, video element seek is async—request another draw so the
+    // frame at the seeked position is visible once the video has updated.
+    if (didSeekWhilePaused) {
+      this.requestRender();
+    }
 
     this.request();
   }

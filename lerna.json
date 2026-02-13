@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "useNx": true,
+  "packages": ["packages/*"],
   "private": false,
   "version": "0.15.16",
   "ignoreChanges": ["**/*.test.ts", "**/*.md"],

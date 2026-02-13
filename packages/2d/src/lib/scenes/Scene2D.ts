@@ -57,6 +57,12 @@ export class Scene2D extends GeneratorScene<View2D> implements Inspectable {
       .playbackState(this.playback.state)
       .globalTime(this.playback.time)
       .fps(this.playback.fps);
+    // When paused, seek all media to current time so Video/audio elements stay in
+    // sync after a user seek (e.g. seekTo). When playing, do not sync here—the
+    // Video draw path (fastSeekedVideo) handles playback and only seeks when out of sync.
+    if (this.playback.state === PlaybackState.Paused) {
+      this.syncAllMediaToCurrentTime();
+    }
     await this.getView().render(context);
     this.renderLifecycle.dispatch([SceneRenderEvent.FinishRender, context]);
     context.restore();
@@ -231,6 +237,27 @@ export class Scene2D extends GeneratorScene<View2D> implements Inspectable {
     );
 
     return returnObjects;
+  }
+
+  /**
+   * Seek all registered Media nodes to the current playback time.
+   * Passes draw time (playback.time) so media sync does not depend on node time signal.
+   */
+  private syncAllMediaToCurrentTime(): void {
+    const drawTime = this.playback.time;
+    const mediaNodes = Array.from(this.registeredNodes.values()).filter(
+      (node): node is Media => node instanceof Media,
+    );
+    for (const media of mediaNodes) {
+      try {
+        media.syncToCurrentTime(drawTime);
+      } catch (e) {
+        this.logger.warn({
+          message: `syncAllMediaToCurrentTime: skipped node ${media.key ?? 'unknown'}`,
+          object: e,
+        });
+      }
+    }
   }
 
   public override stopAllMedia() {
