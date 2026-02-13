@@ -1,6 +1,6 @@
 {
   "name": "@twick/vite-plugin",
-  "version": "0.15.16",
+  "version": "0.15.17",
   "description": "A Vite plugin for twick projects",
   "author": "twick",
   "license": "MIT",
@@ -24,8 +24,8 @@
     "build": "tsup"
   },
   "dependencies": {
-    "@twick/ffmpeg": "0.15.16",
-    "@twick/telemetry": "0.15.16",
+    "@twick/ffmpeg": "0.15.17",
+    "@twick/telemetry": "0.15.17",
     "fast-glob": "^3.3.1",
     "follow-redirects": "^1.15.2",
     "formidable": "^3.5.1",
