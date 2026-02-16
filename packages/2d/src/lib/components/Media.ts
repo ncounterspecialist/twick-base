@@ -20,6 +20,10 @@ export interface MediaProps extends RectProps {
   play?: boolean;
   awaitCanPlay?: SignalValue<boolean>;
   allowVolumeAmplificationInPreview?: SignalValue<boolean>;
+  /** Timeline time when this clip starts; when set, syncToCurrentTime(globalTime) uses clip-relative time. */
+  clipStart?: number;
+  /** Start offset in the media file (e.g. trim); used with clipStart for sync. */
+  trimStart?: number;
 }
 
 const reactivePlaybackRate = `
@@ -91,6 +95,10 @@ export abstract class Media extends Rect {
   > = {};
   protected lastTime = -1;
   private isSchedulingPlay = false;
+  /** When set, syncToCurrentTime(globalTime) converts to clip-relative time. */
+  protected clipStart: number | undefined;
+  /** Used with clipStart for sync (trim offset in source). */
+  protected trimStart = 0;
 
   public constructor(props: MediaProps) {
     super(props);
@@ -104,6 +112,8 @@ export abstract class Media extends Rect {
       this.play();
     }
     this.volume = props.volume ?? 1;
+    this.clipStart = props.clipStart;
+    this.trimStart = props.trimStart ?? 0;
     // Only set volume immediately if media is ready
     if (!this.awaitCanPlay()) {
       this.setVolume(this.volume);
@@ -164,14 +174,30 @@ export abstract class Media extends Rect {
 
   /**
    * Sync the underlying media element to the given time (e.g. draw/playback time).
-   * When `time` is passed (e.g. from Scene2D.draw), that value is used so sync
-   * does not depend on the node's time signal (which may only update on projectData change).
+   * Used for both Video and Audio. When `time` is passed (e.g. from Scene2D.draw), that
+   * value is used so sync does not depend on the node's time signal.
+   * If this node has clipStart set, global time is converted to clip-relative time:
+   * syncTime = trimStart + (time - clipStart) * playbackRate.
    * When omitted, falls back to this.time().
-   * Uses skipCollectPromise so we don't leave a promise in DependencyContext.
+   * When waitForSeek is true, returns a promise that resolves when the seek completes so
+   * the draw can wait and show the correct frame/sample when paused.
    */
-  public syncToCurrentTime(time?: number): void {
-    const syncTime = time ?? this.time();
-    this.setCurrentTime(syncTime, {skipCollectPromise: true});
+  public syncToCurrentTime(
+    time?: number,
+    options?: {waitForSeek?: boolean},
+  ): void | Promise<void> {
+    let syncTime: number;
+    if (time !== undefined && this.clipStart !== undefined) {
+      syncTime = this.trimStart + (time - this.clipStart) * this.playbackRate();
+    } else {
+      syncTime = time ?? this.time();
+    }
+    const promise = this.setCurrentTime(syncTime, {
+      skipCollectPromise: options?.waitForSeek ?? true,
+    });
+    if (options?.waitForSeek) {
+      return promise;
+    }
   }
 
   protected abstract override draw(
@@ -181,41 +207,55 @@ export abstract class Media extends Rect {
   protected setCurrentTime(
     value: number,
     options?: {skipCollectPromise?: boolean},
-  ) {
+  ): Promise<void> {
     try {
       const media = this.mediaElement();
       const key = this.key ?? 'media';
       if (media.readyState < 2) {
-        // Video not ready yet (HAVE_CURRENT_DATA = 2). Record desired time and seek
-        // when ready so the video doesn't stay at 0 or last paused position.
+        // Media not ready yet (HAVE_CURRENT_DATA = 2). Record desired time and seek
+        // when ready; return a promise that resolves when seek completes so draw can wait.
         this.lastTime = value;
         this.time(value);
-        this.waitForCanPlay(media, () => {
-          media.currentTime = value;
-          this.lastTime = value;
-          this.time(value);
+        return new Promise<void>(resolve => {
+          this.waitForCanPlay(media, () => {
+            media.currentTime = value;
+            this.lastTime = value;
+            this.time(value);
+            const onSeeked = () => {
+              media.removeEventListener('seeked', onSeeked);
+              resolve();
+            };
+            if (media.seeking) {
+              media.addEventListener('seeked', onSeeked);
+            } else {
+              resolve();
+            }
+          });
         });
-        return;
       }
 
       media.currentTime = value;
       this.lastTime = value;
       this.time(value);
+      const seekPromise =
+        media.seeking
+          ? new Promise<void>(resolve => {
+              const listener = () => {
+                resolve();
+                media.removeEventListener('seeked', listener);
+              };
+              media.addEventListener('seeked', listener);
+            })
+          : Promise.resolve();
       if (media.seeking && !options?.skipCollectPromise) {
-        DependencyContext.collectPromise(
-          new Promise<void>(resolve => {
-            const listener = () => {
-              resolve();
-              media.removeEventListener('seeked', listener);
-            };
-            media.addEventListener('seeked', listener);
-          }),
-        );
+        DependencyContext.collectPromise(seekPromise);
       }
+      return seekPromise;
     } catch (error) {
       // If media element is not ready yet, just update the lastTime and time signal
       this.lastTime = value;
       this.time(value);
+      return Promise.resolve();
     }
   }
 

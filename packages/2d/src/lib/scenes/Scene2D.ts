@@ -58,10 +58,10 @@ export class Scene2D extends GeneratorScene<View2D> implements Inspectable {
       .globalTime(this.playback.time)
       .fps(this.playback.fps);
     // When paused, seek all media to current time so Video/audio elements stay in
-    // sync after a user seek (e.g. seekTo). When playing, do not sync here—the
-    // Video draw path (fastSeekedVideo) handles playback and only seeks when out of sync.
+    // sync after a user seek (e.g. seekTo). Wait for seeks to complete so the draw shows the correct frame.
+    // When playing, do not sync here—the Video draw path (fastSeekedVideo) handles playback.
     if (this.playback.state === PlaybackState.Paused) {
-      this.syncAllMediaToCurrentTime();
+      await this.syncAllMediaToCurrentTime(true);
     }
     await this.getView().render(context);
     this.renderLifecycle.dispatch([SceneRenderEvent.FinishRender, context]);
@@ -240,23 +240,31 @@ export class Scene2D extends GeneratorScene<View2D> implements Inspectable {
   }
 
   /**
-   * Seek all registered Media nodes to the current playback time.
-   * Passes draw time (playback.time) so media sync does not depend on node time signal.
+   * Seek all registered Media nodes (Video and Audio) to the current playback time.
+   * Passes draw time; nodes with clipStart convert it to clip-relative time.
+   * When waitForSeek is true, waits for each media seek to complete so the next draw shows the correct frame/sample.
    */
-  private syncAllMediaToCurrentTime(): void {
+  private async syncAllMediaToCurrentTime(waitForSeek: boolean): Promise<void> {
     const drawTime = this.playback.time;
     const mediaNodes = Array.from(this.registeredNodes.values()).filter(
       (node): node is Media => node instanceof Media,
     );
-    for (const media of mediaNodes) {
+    const results = mediaNodes.map(media => {
       try {
-        media.syncToCurrentTime(drawTime);
+        return media.syncToCurrentTime(drawTime, {waitForSeek});
       } catch (e) {
         this.logger.warn({
           message: `syncAllMediaToCurrentTime: skipped node ${media.key ?? 'unknown'}`,
           object: e,
         });
+        return undefined;
       }
+    });
+    if (waitForSeek) {
+      const promises = results.filter(
+        (p): p is Promise<void> => p !== undefined,
+      );
+      await Promise.all(promises);
     }
   }
 
