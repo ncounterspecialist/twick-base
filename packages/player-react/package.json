@@ -1,6 +1,6 @@
 {
   "name": "@twick/player-react",
-  "version": "0.15.20",
+  "version": "0.15.21",
   "description": "",
   "author": "twick",
   "license": "MIT",
@@ -25,11 +25,11 @@
   },
   "keywords": [],
   "dependencies": {
-    "@twick/core": "0.15.20",
+    "@twick/core": "0.15.21",
+    "@twick/gl-runtime": "0.15.21",
     "react": "^18",
     "react-dom": "^18",
-    "uuid": "^10.0.0",
-    "@twick/gl-runtime": "0.0.1"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/react": "^18",
