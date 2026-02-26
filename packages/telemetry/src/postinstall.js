@@ -15,6 +15,16 @@ const idPath = path.resolve(os.homedir(), '.twick/id.txt');
 const outputDirectory = path.dirname(idPath);
 
 function Run() {
+  if (process.env.DISABLE_TELEMETRY === 'true') {
+    return;
+  }
+  if (process.env.TWICK_TELEMETRY_NO_ID_FILE === 'true') {
+    return;
+  }
+  if (process.env.TWICK_TELEMETRY_ENABLED !== 'true') {
+    return;
+  }
+
   if (fs.existsSync(idPath)) {
     return;
   }

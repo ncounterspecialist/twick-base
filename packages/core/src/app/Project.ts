@@ -33,6 +33,9 @@ export type ExporterSettings =
     }
   | {
       name: '@twick/core/wasm';
+    }
+  | {
+      name: '@twick/core/wasm-effects';
     };
 
 // Project settings that are used internally
@@ -166,4 +169,15 @@ export interface Project extends Omit<UserProject, 'settings'> {
    * package.json files of the packages.
    */
   versions: Versions;
+
+  /**
+   * Optional resolver for active GL effects per frame. Provided by the host (e.g. twick)
+   * so effect logic (catalog, custom fragments) lives outside twick-base.
+   * When set, WasmEffectsExporter uses this instead of built-in resolution.
+   */
+  getActiveEffectsForFrame?: (
+    variables: Record<string, unknown>,
+    frame: number,
+    fps: number,
+  ) => Array<{fragment: string; progress: number; intensity: number}>;
 }

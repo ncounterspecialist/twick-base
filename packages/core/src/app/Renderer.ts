@@ -4,6 +4,7 @@ import {
   FFmpegExporterClient,
   ImageExporter,
   WasmExporter,
+  WasmEffectsExporter,
   type Exporter,
 } from '../exporter';
 import type {Scene} from '../scenes';
@@ -230,6 +231,7 @@ export class Renderer {
       FFmpegExporterClient,
       ImageExporter,
       WasmExporter,
+      WasmEffectsExporter,
     ];
 
     const exporterClass = exporters.find(

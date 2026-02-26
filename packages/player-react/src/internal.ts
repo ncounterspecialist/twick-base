@@ -1,7 +1,11 @@
 import type {Project} from '@twick/core';
-import {Player, Stage, getFullPreviewSettings} from '@twick/core';
-
-import {Vector2} from '@twick/core';
+import {Player, Stage, getFullPreviewSettings, Vector2} from '@twick/core';
+import {
+  applyEffects,
+  createEffectContext,
+  type ActiveEffect,
+  type EffectContext,
+} from '@twick/gl-runtime';
 
 const stylesNew = `
 .overlay {
@@ -149,6 +153,21 @@ class TwickPlayer extends HTMLElement {
   private _looping = true;
   private _volume = 1;
   private volumeChangeRequested = true;
+
+  /** WebGL canvas and context for applying effects to the live preview. */
+  private effectGlCanvas: HTMLCanvasElement | OffscreenCanvas | null = null;
+  private effectContext: EffectContext | null = null;
+  private effectReadbackFbo: WebGLFramebuffer | null = null;
+
+  /**
+   * Optional resolver for active effects at a given time. Set by the host (e.g. twick) so
+   * effect logic lives outside twick-base. When set, used for live preview effects.
+   */
+  public getActiveEffectsForTime?: (
+    variables: Record<string, unknown>,
+    timeInSec: number,
+    fps: number,
+  ) => Array<{fragment: string; progress: number; intensity: number}>;
 
   public constructor() {
     super();
@@ -303,6 +322,98 @@ class TwickPlayer extends HTMLElement {
   };
 
   /**
+   * Resolve active effects for the given time. Uses host-provided callback when set.
+   */
+  private resolveActiveEffectsForTime(timeInSec: number): ActiveEffect[] {
+    if (this.getActiveEffectsForTime) {
+      const fps = this.player?.playback.fps ?? 30;
+      return this.getActiveEffectsForTime(this.variables, timeInSec, fps);
+    }
+    return [];
+  }
+
+  /**
+   * Apply GL effects to the current frame and draw the result back to the stage canvas.
+   */
+  private applyEffectsToFinalBuffer(): void {
+    const canvas = this.stage.finalBuffer;
+    const w = canvas.width;
+    const h = canvas.height;
+    if (w <= 0 || h <= 0) return;
+
+    const activeEffects = this.resolveActiveEffectsForTime(this.time);
+    if (activeEffects.length === 0) return;
+
+    if (!this.effectGlCanvas) {
+      this.effectGlCanvas = typeof OffscreenCanvas !== 'undefined'
+        ? new OffscreenCanvas(w, h)
+        : document.createElement('canvas');
+      (this.effectGlCanvas as HTMLCanvasElement).width = w;
+      (this.effectGlCanvas as HTMLCanvasElement).height = h;
+    }
+    const glCanvas = this.effectGlCanvas as HTMLCanvasElement & { width: number; height: number };
+    if (glCanvas.width !== w || glCanvas.height !== h) {
+      glCanvas.width = w;
+      glCanvas.height = h;
+    }
+
+    if (!this.effectContext) {
+      this.effectContext = createEffectContext(glCanvas);
+    }
+
+    const gl = this.effectContext.gl;
+    const sourceTexture = gl.createTexture();
+    if (!sourceTexture) return;
+
+    gl.bindTexture(gl.TEXTURE_2D, sourceTexture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
+
+    const resultTexture = applyEffects({
+      ctx: this.effectContext,
+      sourceTexture,
+      width: w,
+      height: h,
+      effects: activeEffects,
+    });
+
+    gl.deleteTexture(sourceTexture);
+
+    // Read back from the result texture (it's an FBO attachment) via a readback FBO
+    if (!this.effectReadbackFbo) {
+      this.effectReadbackFbo = gl.createFramebuffer();
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.effectReadbackFbo);
+    gl.framebufferTexture2D(
+      gl.FRAMEBUFFER,
+      gl.COLOR_ATTACHMENT0,
+      gl.TEXTURE_2D,
+      resultTexture,
+      0,
+    );
+    const pixels = new Uint8Array(w * h * 4);
+    gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+    const ctx2d = canvas.getContext('2d');
+    if (ctx2d) {
+      const imageData = ctx2d.createImageData(w, h);
+      const rowBytes = w * 4;
+      for (let y = 0; y < h; y++) {
+        imageData.data.set(
+          pixels.subarray((h - 1 - y) * rowBytes, (h - y) * rowBytes),
+          y * rowBytes,
+        );
+      }
+      ctx2d.putImageData(imageData, 0, 0);
+    }
+  }
+
+  /**
    * Called on every frame.
    */
   private render = async () => {
@@ -311,6 +422,8 @@ class TwickPlayer extends HTMLElement {
         this.player.playback.currentScene,
         this.player.playback.previousScene,
       );
+
+      this.applyEffectsToFinalBuffer();
 
       this.dispatchEvent(new CustomEvent('timeupdate', {detail: this.time}));
 

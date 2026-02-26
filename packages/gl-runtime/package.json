@@ -1,0 +1,20 @@
+{
+  "name": "@twick/gl-runtime",
+  "version": "0.15.21",
+  "description": "Low-level WebGL post-processing runtime for Twick.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "author": "twick",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ncounterspecialist/twick-base.git"
+  }
+}
+

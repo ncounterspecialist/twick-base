@@ -3,12 +3,30 @@ import os from 'os';
 import path from 'path';
 import {PostHog} from 'posthog-node';
 
-const Client = new PostHog('phc_XaPky8YDbZjqm4GkCWBsVmICZTOTgjascrsftSOoJUJ', {
-  host: 'https://eu.posthog.com',
-});
+let client: PostHog | null = null;
+
+function isTelemetryEnabled(): boolean {
+  if (process.env.DISABLE_TELEMETRY === 'true') {
+    return false;
+  }
+  return process.env.TWICK_TELEMETRY_ENABLED === 'true';
+}
+
+function getTelemetryClient(): PostHog | null {
+  if (!isTelemetryEnabled()) return null;
+  if (client) return client;
+
+  const apiKey = process.env.TWICK_TELEMETRY_API_KEY;
+  if (!apiKey) return null;
+
+  client = new PostHog(apiKey, {
+    host: process.env.TWICK_TELEMETRY_HOST || 'https://eu.posthog.com',
+  });
+  return client;
+}
 
 process.on('beforeExit', async () => {
-  await Client.shutdown();
+  await client?.shutdown();
 });
 
 export enum EventName {
@@ -50,9 +68,8 @@ export async function sendEvent(
   eventName: EventName,
   eventProperties: object = {},
 ) {
-  if (process.env.DISABLE_TELEMETRY === 'true') {
-    return;
-  }
+  const telemetryClient = getTelemetryClient();
+  if (!telemetryClient) return;
 
   try {
     const [version, distinctId] = await Promise.all([
@@ -60,7 +77,7 @@ export async function sendEvent(
       getDistinctId(),
     ]);
 
-    Client.capture({
+    telemetryClient.capture({
       distinctId,
       event: eventName,
       properties: {

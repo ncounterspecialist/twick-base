@@ -69,7 +69,12 @@ export class TxtLeaf extends Shape {
     const fontOffset = context.measureText('').fontBoundingBoxAscent;
 
     const parentRect = this.element.getBoundingClientRect();
-    const {width, height} = this.size();
+    // Use the actual rendered text bounds to center lines around the node origin
+    const fullRange = document.createRange();
+    fullRange.selectNodeContents(this.element);
+    const fullRect = fullRange.getBoundingClientRect();
+    const centerX = (fullRect.left + fullRect.right) / 2;
+    const centerY = (fullRect.top + fullRect.bottom) / 2;
     const range = document.createRange();
     let line = '';
     const lineRect = new BBox();
@@ -81,8 +86,10 @@ export class TxtLeaf extends Shape {
       range.selectNodeContents(childNode);
       const rangeRect = range.getBoundingClientRect();
 
-      const x = width / -2 + rangeRect.left - parentRect.left;
-      const y = height / -2 + rangeRect.top - parentRect.top + fontOffset;
+      // Compute local coordinates relative to the visual text center so that
+      // text is centered around the node origin instead of starting at it.
+      const x = rangeRect.left - centerX;
+      const y = rangeRect.top - centerY + fontOffset;
 
       if (lineRect.y === y) {
         lineRect.width += rangeRect.width;

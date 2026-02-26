@@ -45,18 +45,19 @@ export function getParamDefaultsAndCheckValidity(settings: RenderSettings): {
     };
   }
 
+  const isWasmExporter =
+    settings.projectSettings?.exporter?.name === '@twick/core/wasm' ||
+    settings.projectSettings?.exporter?.name === '@twick/core/wasm-effects';
+
   // Wasm exporter only supports exporting to mp4
-  if (
-    settings.projectSettings?.exporter?.name === '@twick/core/wasm' &&
-    extension !== 'mp4'
-  ) {
+  if (isWasmExporter && extension !== 'mp4') {
     throw Error(
       'The Wasm Exporter only supports exporting to mp4. Please adjust the extension of your output file name',
     );
   }
 
-  // If we are using the wasm exporter, we don't need to validate further
-  if (settings.projectSettings?.exporter?.name === '@twick/core/wasm') {
+  // If we are using the wasm exporter (or wasm-effects), we don't need to validate further
+  if (isWasmExporter) {
     return {
       ...defaultReturn,
       outputFileName: outFileWithoutExtension,
@@ -64,37 +65,35 @@ export function getParamDefaultsAndCheckValidity(settings: RenderSettings): {
     };
   }
 
-  // If we are using the ffmpeg exporter, we need to check the extension matches the format
-  if (
-    settings.projectSettings?.exporter?.options.format === 'mp4' &&
-    extension !== 'mp4'
-  ) {
-    throw Error(
-      "You've chosen mp4 as your file format in the exporter options, but your outFile does not have a mp4 extension. Please use an mp4 extension",
-    );
-  }
-
-  if (
-    settings.projectSettings?.exporter?.options.format === 'webm' &&
-    extension !== 'webm'
-  ) {
-    throw Error(
-      "You've chosen webm as your file format in the exporter options, but your outFile does not have a webm extension. Please use a webm extension",
-    );
-  }
-
-  if (
-    settings.projectSettings?.exporter?.options.format === 'proRes' &&
-    extension !== 'mov'
-  ) {
-    throw Error(
-      "You've chosen proRes as your file format in the exporter options, but your outFile does not have a mov extension. Please use a mov extension",
-    );
+  // Only the ffmpeg exporter has options.format; narrow type before accessing
+  const exporter = settings.projectSettings?.exporter;
+  if (exporter?.name === '@twick/core/ffmpeg') {
+    const options = exporter.options;
+    if (options.format === 'mp4' && extension !== 'mp4') {
+      throw Error(
+        "You've chosen mp4 as your file format in the exporter options, but your outFile does not have a mp4 extension. Please use an mp4 extension",
+      );
+    }
+    if (options.format === 'webm' && extension !== 'webm') {
+      throw Error(
+        "You've chosen webm as your file format in the exporter options, but your outFile does not have a webm extension. Please use a webm extension",
+      );
+    }
+    if (options.format === 'proRes' && extension !== 'mov') {
+      throw Error(
+        "You've chosen proRes as your file format in the exporter options, but your outFile does not have a mov extension. Please use a mov extension",
+      );
+    }
+    return {
+      ...defaultReturn,
+      outputFileName: outFileWithoutExtension,
+      format: options.format ?? 'mp4',
+    };
   }
 
   return {
     ...defaultReturn,
     outputFileName: outFileWithoutExtension,
-    format: settings.projectSettings?.exporter?.options.format ?? 'mp4',
+    format: 'mp4',
   };
 }
