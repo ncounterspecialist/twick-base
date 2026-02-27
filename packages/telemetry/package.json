@@ -1,6 +1,6 @@
 {
   "name": "@twick/telemetry",
-  "version": "0.15.21",
+  "version": "0.15.22",
   "description": "Telemetry for Twick. Check the documentation to learn how to disable it.",
   "author": "twick",
   "license": "MIT",

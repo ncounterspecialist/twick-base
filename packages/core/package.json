@@ -1,6 +1,6 @@
 {
   "name": "@twick/core",
-  "version": "0.15.21",
+  "version": "0.15.22",
   "description": "A web-based framework for creating videos programmatically",
   "author": "twick",
   "license": "MIT",
@@ -27,7 +27,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@twick/gl-runtime": "0.15.21",
+    "@twick/gl-runtime": "0.15.22",
     "culori": "^4.0.1",
     "mp4-wasm": "^1.0.6"
   },
