@@ -3,13 +3,16 @@
   "useNx": true,
   "packages": ["packages/*"],
   "private": false,
-  "version": "0.15.26",
+  "version": "0.15.27",
   "ignoreChanges": ["**/*.test.ts", "**/*.md"],
   "message": "ci(release): %v [skip ci]",
   "conventionalCommits": true,
   "command": {
     "version": {
       "changelog": false
+    },
+    "publish": {
+      "access": "public"
     }
   }
 }
