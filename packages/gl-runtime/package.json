@@ -1,6 +1,6 @@
 {
   "name": "@twick/gl-runtime",
-  "version": "0.15.28",
+  "version": "0.15.29",
   "description": "Low-level WebGL post-processing runtime for Twick.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
