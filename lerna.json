@@ -3,7 +3,7 @@
   "useNx": true,
   "packages": ["packages/*"],
   "private": false,
-  "version": "0.15.30",
+  "version": "0.15.31",
   "ignoreChanges": ["**/*.test.ts", "**/*.md"],
   "message": "ci(release): %v [skip ci]",
   "conventionalCommits": true,
