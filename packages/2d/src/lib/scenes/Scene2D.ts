@@ -182,18 +182,29 @@ export class Scene2D extends GeneratorScene<View2D> implements Inspectable {
     const allAudios = Array.from(this.registeredNodes.values())
       .filter((node): node is Audio => node instanceof Audio);
     
-    // During rendering, mark all media as playing if they have a valid src
+    // During rendering, mark media as playing if they have a valid src AND are active at current global time.
     if (isRendering) {
+      const globalTime = this.getView().globalTime();
       allVideos.forEach(video => {
         const src = video.src();
-        if (src && src !== 'undefined' && !video.isPlaying()) {
+        if (
+          src &&
+          src !== 'undefined' &&
+          !video.isPlaying() &&
+          (video as any).isActiveAtGlobalTime?.(globalTime) !== false
+        ) {
           // Set playing state directly for rendering mode
           (video as any).playing(true);
         }
       });
       allAudios.forEach(audio => {
         const src = audio.src();
-        if (src && src !== 'undefined' && !audio.isPlaying()) {
+        if (
+          src &&
+          src !== 'undefined' &&
+          !audio.isPlaying() &&
+          (audio as any).isActiveAtGlobalTime?.(globalTime) !== false
+        ) {
           // Set playing state directly for rendering mode
           (audio as any).playing(true);
         }

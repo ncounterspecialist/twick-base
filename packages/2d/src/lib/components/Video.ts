@@ -84,6 +84,38 @@ export class Video extends Media {
     super(props);
   }
 
+  public override dispose() {
+    // Stop and release pooled video element for this node.
+    try {
+      const src = this.src();
+      const keys = new Set<string>([
+        `${this.key}/${src || 'pending'}`,
+        `${this.key}/pending`,
+      ]);
+      if (src && src !== 'undefined') {
+        keys.add(`${this.key}/${src}`);
+        keys.add(`${this.key}/${src}_no_cors`);
+      }
+
+      for (const k of keys) {
+        const el = (Video as any).pool?.[k] as HTMLVideoElement | undefined;
+        if (el) {
+          try {
+            el.pause();
+            el.currentTime = 0;
+          } catch {
+            // ignore
+          }
+          delete (Video as any).pool[k];
+        }
+      }
+    } catch {
+      // ignore
+    }
+
+    super.dispose();
+  }
+
   /**
    * Creates a video element with CORS fallback handling.
    * First tries with crossOrigin='anonymous', and if that fails due to CORS,

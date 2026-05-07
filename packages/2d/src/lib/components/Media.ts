@@ -22,6 +22,12 @@ export interface MediaProps extends RectProps {
   allowVolumeAmplificationInPreview?: SignalValue<boolean>;
   /** Timeline time when this clip starts; when set, syncToCurrentTime(globalTime) uses clip-relative time. */
   clipStart?: number;
+  /**
+   * Timeline time when this clip ends (non-inclusive).
+   * When set (together with clipStart), rendering/asset collection will only consider this media
+   * active for globalTime in [clipStart, clipEnd).
+   */
+  clipEnd?: number;
   /** Start offset in the media file (e.g. trim); used with clipStart for sync. */
   trimStart?: number;
 }
@@ -97,6 +103,8 @@ export abstract class Media extends Rect {
   private isSchedulingPlay = false;
   /** When set, syncToCurrentTime(globalTime) converts to clip-relative time. */
   protected clipStart: number | undefined;
+  /** When set, clip is only active before this global time (non-inclusive). */
+  protected clipEnd: number | undefined;
   /** Used with clipStart for sync (trim offset in source). */
   protected trimStart = 0;
 
@@ -113,6 +121,7 @@ export abstract class Media extends Rect {
     }
     this.volume = props.volume ?? 1;
     this.clipStart = props.clipStart;
+    this.clipEnd = props.clipEnd;
     this.trimStart = props.trimStart ?? 0;
     // Only set volume immediately if media is ready
     if (!this.awaitCanPlay()) {
@@ -122,6 +131,13 @@ export abstract class Media extends Rect {
   
   public isPlaying(): boolean {
     return this.playing();
+  }
+
+  public isActiveAtGlobalTime(globalTime: number): boolean {
+    if (this.clipStart === undefined) return true;
+    if (globalTime < this.clipStart) return false;
+    if (this.clipEnd === undefined) return true;
+    return globalTime < this.clipEnd;
   }
 
   public getCurrentTime(): number {
@@ -154,8 +170,13 @@ export abstract class Media extends Rect {
   }
 
   public override dispose() {
-    // Set playing state to false without trying to access media element
+    // Ensure underlying pooled media element is stopped.
     this.playing(false);
+    try {
+      this.mediaElement().pause();
+    } catch {
+      // Media element may not be ready yet; playing=false is still authoritative.
+    }
     this.time.save();
     this.remove();
     super.dispose();
@@ -186,6 +207,20 @@ export abstract class Media extends Rect {
     time?: number,
     options?: {waitForSeek?: boolean},
   ): void | Promise<void> {
+    // When a global timeline time is provided, enforce clip window semantics:
+    // if we're outside [clipStart, clipEnd), ensure media is not playing.
+    // This is especially important in paused + seek flows where the renderer
+    // syncs media elements to a new time but should not start/resume audio.
+    if (time !== undefined && !this.isActiveAtGlobalTime(time)) {
+      // Ensure playing flag is false and pause the underlying element immediately if possible.
+      this.playing(false);
+      try {
+        this.mediaElement().pause();
+      } catch {
+        // Media element may not be ready yet; playing=false is still authoritative.
+      }
+    }
+
     let syncTime: number;
     if (time !== undefined && this.clipStart !== undefined) {
       syncTime = this.trimStart + (time - this.clipStart) * this.playbackRate();
@@ -561,15 +596,21 @@ export abstract class Media extends Rect {
     this.playing(false);
     this.time.save();
     
-    // Try to pause the media element if it's available
-    // Use setTimeout to defer access and avoid async property issues
+    // Try to pause immediately (important for paused+seek to avoid audible blips)
+    try {
+      const media = this.mediaElement();
+      media.pause();
+      return;
+    } catch {
+      // If media element is not ready yet, fall back to deferred access
+    }
+
+    // Defer access to avoid async property issues
     setTimeout(() => {
       try {
-        const media = this.mediaElement();
-        media.pause();
-      } catch (error) {
-        // If media element is not ready yet, just update the state
-        // The media won't be playing anyway if it's not ready
+        this.mediaElement().pause();
+      } catch {
+        // Media element still not ready; nothing else to do.
       }
     }, 0);
   }
@@ -592,10 +633,16 @@ export abstract class Media extends Rect {
   protected autoPlayBasedOnTwick() {
     // Auto-start/stop playback based on Twick's playback state
     const playbackState = this.view().playbackState();
-    const shouldBePlaying =
+    const baseShouldBePlaying =
       playbackState === PlaybackState.Playing ||
       playbackState === PlaybackState.Presenting ||
       playbackState === PlaybackState.Rendering;
+
+    // In renderer/export mode we collect media assets for server-side FFmpeg audio extraction.
+    // Only treat media as "active" when within its clip window (if provided),
+    // otherwise audio clips will be stitched past their intended end time and overlap.
+    const globalTime = this.view().globalTime();
+    const shouldBePlaying = baseShouldBePlaying && this.isActiveAtGlobalTime(globalTime);
 
     // In both preview and renderer/export mode we want media elements
     // to be considered "playing" whenever Twick is advancing frames.

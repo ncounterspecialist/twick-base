@@ -11,6 +11,38 @@ export class Audio extends Media {
     super(props);
   }
 
+  public override dispose() {
+    // Stop and release pooled audio element for this node.
+    try {
+      const src = this.src();
+      const keys = new Set<string>([
+        `${this.key}/${src || 'pending'}`,
+        `${this.key}/pending`,
+      ]);
+      if (src && src !== 'undefined') {
+        keys.add(`${this.key}/${src}`);
+      }
+
+      for (const k of keys) {
+        const el = Audio.pool[k];
+        if (el) {
+          try {
+            el.pause();
+            // Reset so a reused element can't continue from an old time.
+            el.currentTime = 0;
+          } catch {
+            // ignore
+          }
+          delete Audio.pool[k];
+        }
+      }
+    } catch {
+      // ignore
+    }
+
+    super.dispose();
+  }
+
   protected mediaElement(): HTMLAudioElement {
     return this.audio();
   }
